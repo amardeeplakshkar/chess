@@ -10,6 +10,18 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
+			gold: {
+				DEFAULT: '#FFD700',
+				dark: '#B8860B'
+			},
+			silver: {
+				DEFAULT: '#C0C0C0',
+				dark: '#808080'
+			},
+			bronze: {
+				DEFAULT: '#CD7F32',
+				dark: '#8B5A2B'
+			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
