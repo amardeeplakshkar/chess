@@ -9,7 +9,7 @@ const HomePage = () => {
   return (
     <div className='h-full w-full flex flex-col items-center p-4'>
       <div className='flex-1 flex flex-col w-full'>
-        <div className="font-bold uppercase w-full leading-none text-center text-white" style={{ fontSize: '11.95dvw' }}>Early Access</div>
+        <div className="font-bold uppercase w-full leading-none text-center text-white" style={{ fontSize: '11dvw' }}>Early Access</div>
         <div className='flex w-full justify-between p-2 items-center'>
           <Button>
             <CheckpointIcon height={20} width={20}/>
