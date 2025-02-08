@@ -11,7 +11,7 @@ const DockItems = [
     {
         icon: RiHome5Fill,
         icon2: RiHome5Line,
-        link: '/',
+        link: '/test',
     },
     {
         icon: BiSolidZap,

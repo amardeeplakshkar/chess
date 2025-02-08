@@ -19,13 +19,13 @@ const Frens = () => {
         <h3 className='text-white text-2xl font-bold'>
           How it works?
         </h3>
-        <p className='text-muted-foreground text-sm'>
+        <div className='text-muted-foreground text-sm'>
           <ul>
             <li>Invite more frens to earn more CPs</li>
             <li>5 CPs per invite</li>
             <li>15 CPs per invite for frens with telegram premium</li>
           </ul>
-        </p>
+        </div>
       </div>
       <div className='flex-1 flex flex-col my-6 gap-2'>
         <div className='bg-[#141414]/80 rounded-md p-4 backdrop-blur-sm flex font-semibold items-center justify-between gap-2'>
@@ -41,7 +41,7 @@ const Frens = () => {
           </span>
         </div>
       </div>
-      <div className='w-full flex mb-8 flex-col gap-2 p-2'>
+      <div className='text-[.8rem] font-semibold w-full flex mb-8 flex-col gap-2 p-2'>
         <Button className='bg-white text-black'>
           Invite Frens
         </Button>

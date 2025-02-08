@@ -1,6 +1,7 @@
 import Button from '@/components/Button';
 import CheckpointIcon from '@/components/CheckpointIcon'
 import TaskCard from '@/components/TaskCard'
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { limitedTasks, partnerAirdropTasks, socialMediaTasks } from '@/constants'
 import React from 'react'
@@ -53,17 +54,22 @@ const Tasks = () => {
                         Partners
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent className='*:my-1' value='limited'>
-                    {limitedTasks.map((task, index) => (
-                        <TaskCard key={index} iconBg='bg-white/10' title={task.title} taskIcon={task.taskIcon} points={task.points} />
-                    ))}
+                <TabsContent className='' value='limited'>
+                    <ScrollArea className='h-[50dvh] *:my-1'>
+                        {limitedTasks.map((task, index) => (
+                            <TaskCard key={index} iconBg='bg-white/10' title={task.title} taskIcon={task.taskIcon} points={task.points} />
+                        ))}
+                    </ScrollArea>
                 </TabsContent>
-                <TabsContent className='*:my-1' value='social'>
+                <TabsContent className='' value='social'>
+                    <ScrollArea className='h-[50dvh] *:my-1 '>
                     {socialMediaTasks.map((task, index) => (
                         <TaskCard key={index} iconBg='bg-white/10' title={task.title} taskIcon={task.taskIcon} points={task.points} />
                     ))}
+                    </ScrollArea>
                 </TabsContent>
                 <TabsContent value='partner'>
+                    <ScrollArea className='h-[50dvh]'>
                     {Object.entries(groupedTasks).map(([partnerBg, tasks], index) => (
                         <div key={index} style={{
                             backgroundImage: `url(${partnerBg})`,
@@ -73,7 +79,7 @@ const Tasks = () => {
                             ))}
                         </div>
                     ))}
-
+                    </ScrollArea>
                 </TabsContent>
             </Tabs>
         </div>
