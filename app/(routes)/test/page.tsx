@@ -14,7 +14,11 @@ export default function UserProfile() {
       {userData ? (
         <>
           <h2 className="text-lg font-bold">Welcome, {userData.firstName}!</h2>
+          <p className="text-sm">Last Name: {userData.lastName}</p>
           {userData.username && <p className="text-sm">@{userData.username}</p>}
+          <p className="text-sm">User ID: {userData.id}</p>
+          <p className="text-sm">Is Premium: {userData.is_premium ? "Yes" : "No"}</p>
+          {userData.photo_url && <img src={userData.photo_url} alt="User Photo" className="mt-4 rounded-full" />}
         </>
       ) : (
         <p>No user data available</p>

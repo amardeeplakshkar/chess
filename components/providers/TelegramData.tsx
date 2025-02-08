@@ -7,6 +7,8 @@ interface UserData {
   firstName?: string;
   lastName?: string;
   username?: string;
+  is_premium?: boolean;
+  photo_url?: string
 }
 
 interface TelegramContextType {
@@ -36,6 +38,8 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
               firstName: user?.first_name || "",
               lastName: user?.last_name || "",
               username: user?.username || "",
+              is_premium: user?.is_premium || false,
+              photo_url: user?.photo_url || "",
             };
 
             setUserData(userInfo);
