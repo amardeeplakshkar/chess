@@ -8,7 +8,7 @@ interface UserData {
   lastName?: string;
   username?: string;
   is_premium?: boolean;
-  photo_url?: string
+  photo_url?: string;
 }
 
 interface TelegramContextType {

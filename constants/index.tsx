@@ -61,38 +61,22 @@ export const socialMediaTasks = [
 ];
 
 
-import { BsCoin, BsGift, BsTelegram, BsPersonCheck } from "react-icons/bs";
-
-export const partnerAirdropTasks = [
-    {
-        id: "PA2a1b3c4d6e7f8a9b0c1d01",
-        title: "Join Partner Telegram",
-        taskIcon: <BsTelegram />,
-        points: 50,
-        partnerBg : "https://blog.obiex.finance/content/images/size/w720/2024/02/blog-cover45.jpg"
-    },
-
-    {
-        id: "PA2a1b3c4d6e7f8a9b0c1d02",
-        title: "Follow Partner on Twitter",
-        taskIcon: <BsPersonCheck />,
-        points: 30,
-        partnerBg : "https://blog.obiex.finance/content/images/size/w720/2024/02/blog-cover45.jpg"
-    },
-
-    {
-        id: "PA2a1b3c4d6e7f8a9b0c1d03",
-        title: "Claim Partner Airdrop",
-        taskIcon: <BsGift />,
-        points: 100,
-        partnerBg : "https://miro.medium.com/v2/resize:fit:720/format:webp/0*BpBk3olJUw5TiqCF.png"
-    },
-
-    {
-        id: "PA2a1b3c4d6e7f8a9b0c1d04",
-        title: "Stake Partner Tokens",
-        taskIcon: <BsCoin />,
-        points: 200,
-        partnerBg : "https://miro.medium.com/v2/resize:fit:720/format:webp/0*BpBk3olJUw5TiqCF.png"
-    },
+const checkpoints = [
+    { day: "Day 01", number: 10 },
+    { day: "Day 02", number: 20 },
+    { day: "Day 03", number: 30, isSpecial: true },
+    { day: "Day 04", number: 40 },
+    { day: "Day 05", number: 50 },
+    { day: "Day 06", number: 60 },
+    { day: "Day 07", number: 70 },
+    { day: "Day 08", number: 80, isSpecial: true },
+    { day: "Day 09", number: 90 },
+    { day: "Day 10", number: 100 },
+    { day: "Day 11", number: 110 },
+    { day: "Day 12", number: 120 },
+    { day: "Day 13", number: 130 },
+    { day: "Day 14", number: 140, isSpecial: true },
+    { day: "Day 15", number: 150 }
 ];
+
+export {checkpoints};

@@ -1,6 +1,7 @@
 'use client'
 import Button from '@/components/Button'
 import CheckpointIcon from '@/components/CheckpointIcon'
+import CurrentChapter from '@/components/CurrentChapter'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
@@ -10,15 +11,7 @@ const HomePage = () => {
     <div className='h-full w-full flex flex-col items-center p-4'>
       <div className='flex-1 flex flex-col w-full'>
         <div className="font-bold uppercase w-full leading-none text-center text-white" style={{ fontSize: '11dvw' }}>Early Access</div>
-        <div className='flex w-full justify-between p-2 items-center'>
-          <Button>
-            <CheckpointIcon height={20} width={20} />
-            805
-          </Button>
-          <div>
-            <div className='text-white text-2xl uppercase font-bold'>Chapter 1</div>
-          </div>
-        </div>
+        <CurrentChapter/>
         <div className='flex flex-1 flex-col justify-center items-center'>
           <CheckpointIcon height={200} width={200} />
           <div className="font-bold flex justify-center items-end w-full leading-none text-center text-white" style={{ fontSize: '8dvw' }}>

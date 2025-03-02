@@ -1,20 +1,14 @@
+'use client'
 import Button from '@/components/Button'
 import CheckpointIcon from '@/components/CheckpointIcon'
+import CurrentChapter from '@/components/CurrentChapter'
 import React from 'react'
 import { BsPeopleFill } from 'react-icons/bs'
 
 const Frens = () => {
   return (
     <div className='h-full w-full flex flex-col p-4'>
-      <div className='flex w-full justify-between py-2 items-center'>
-        <Button>
-          <CheckpointIcon height={20} width={20} />
-          805
-        </Button>
-        <div>
-          <div className='text-white text-2xl uppercase font-bold'>Chapter 1</div>
-        </div>
-      </div>
+      <CurrentChapter />
       <div className='pb-2'>
         <h3 className='text-white text-2xl font-bold'>
           How it works?
@@ -27,20 +21,33 @@ const Frens = () => {
           </ul>
         </div>
       </div>
-      <div className='flex-1 flex flex-col my-6 gap-2'>
-        <div className='bg-[#141414]/80 rounded-md p-4 backdrop-blur-sm flex font-semibold items-center justify-between gap-2'>
-          <BsPeopleFill />
-          <span>
-            15
-          </span>
-        </div>
-        <div className='bg-[#141414]/80 rounded-md p-4 backdrop-blur-sm flex font-semibold items-center justify-between gap-2'>
-          <CheckpointIcon width={20} height={20} />
-          <span>
-            1550
-          </span>
+      <div className='flex-1 flex justify-center items-center w-full'>
+        <div className='flex flex-col bg-[#141414]/80 overflow-hidden w-full rounded-lg justify-between items-center my-6 gap-2'>
+          <div className='p-4 border-b w-full backdrop-blur-sm flex font-semibold items-center justify-between gap-2'>
+            <div className='flex items-center gap-2'>
+              <BsPeopleFill />
+              <p>
+                Friends
+              </p>
+            </div>
+            <span>
+              15
+            </span>
+          </div>
+          <div className='p-4 w-full backdrop-blur-sm flex font-semibold items-center justify-between gap-2'>
+            <div className='flex gap-2'>
+              <CheckpointIcon width={20} height={20} />
+              <p>
+                Earned CPs
+              </p>
+            </div>
+            <span>
+              1550
+            </span>
+          </div>
         </div>
       </div>
+
       <div className='text-[.8rem] font-semibold w-full flex mb-8 flex-col gap-2 p-2'>
         <Button className='bg-white text-black'>
           Invite Frens
