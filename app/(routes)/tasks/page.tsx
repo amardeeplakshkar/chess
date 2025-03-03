@@ -5,24 +5,13 @@ import { useTelegram } from '@/components/providers/TelegramData';
 import TaskCard from '@/components/TaskCard'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { BsCoin, BsGift, BsTelegram, BsPersonCheck } from "react-icons/bs";
 import { BsShare, BsHeartFill, BsChatDotsFill, BsGlobe } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
-
-type Task = {
-    id: string;
-    title: string;
-    taskIcon: React.ReactNode;
-    points: number;
-    partnerBg: string;
-    onClick?: () => void
-};
-
-
-
 
 const Tasks = () => {
     const { userData } = useTelegram()
@@ -107,53 +96,52 @@ const Tasks = () => {
 
     const partnerAirdropTasks = [
         {
-            id: "PA2a1b3c4d6e7f8a9b0c1d01",
-            title: "Join Partner Telegram",
-            taskIcon: <BsTelegram />,
-            points: 50,
-            url: "https://t.me/pawsupfam",
+            name: "Partner Airdrop",
+            logo: "https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/DropNFT",
             partnerBg: "https://blog.obiex.finance/content/images/size/w720/2024/02/blog-cover45.jpg",
-            onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d01", "https://t.me/pawsupfam", 50)
+            tasks: [
+                {
+                    id: "PA2a1b3c4d6e7f8a9b0c1d01",
+                    title: "Join Partner Telegram",
+                    taskIcon: <BsTelegram />,
+                    points: 50,
+                    url: "https://t.me/pawsupfam",
+                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d01", "https://t.me/pawsupfam", 50)
+                },
+                {
+                    id: "PA2a1b3c4d6e7f8a9b0c1d02",
+                    title: "Follow Partner on Twitter",
+                    taskIcon: <BsPersonCheck />,
+                    points: 30,
+                    url: "https://twitter.com/partner",
+                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d02", "https://twitter.com/partner", 30)
+                }
+            ]
         },
-
         {
-            id: "PA2a1b3c4d6e7f8a9b0c1d02",
-            title: "Follow Partner on Twitter",
-            taskIcon: <BsPersonCheck />,
-            points: 30,
-            url: "https://twitter.com/partner",
-            partnerBg: "https://blog.obiex.finance/content/images/size/w720/2024/02/blog-cover45.jpg",
-            onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d02", "https://twitter.com/partner", 30)
-        },
-
-        {
-            id: "PA2a1b3c4d6e7f8a9b0c1d03",
-            title: "Claim Partner Airdrop",
-            taskIcon: <BsGift />,
-            points: 100,
-            url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
+            name: "Partner B Airdrop",
+            logo: "https://images.squarespace-cdn.com/content/v1/5313d422e4b0aeaef76ef185/6da8296e-c16e-478c-8b4f-598f8e05db98/IAGE+Logo.jpg",
             partnerBg: "https://miro.medium.com/v2/resize:fit:720/format:webp/0*BpBk3olJUw5TiqCF.png",
-            onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d03", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 100)
-        },
-
-        {
-            id: "PA2a1b3c4d6e7f8a9b0c1d04",
-            title: "Stake Partner Tokens",
-            taskIcon: <BsCoin />,
-            points: 200,
-            url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
-            partnerBg: "https://miro.medium.com/v2/resize:fit:720/format:webp/0*BpBk3olJUw5TiqCF.png",
-            onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d04", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 200)
-        },
-    ];
-
-    const groupedTasks: Record<string, Task[]> = partnerAirdropTasks.reduce((acc, task) => {
-        if (!acc[task.partnerBg]) {
-            acc[task.partnerBg] = [];
+            tasks: [
+                {
+                    id: "PB2a1b3c4d6e7f8a9b0c1d03",
+                    title: "Claim Partner B Airdrop",
+                    taskIcon: <BsGift />,
+                    points: 100,
+                    url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
+                    onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d03", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 100)
+                },
+                {
+                    id: "PB2a1b3c4d6e7f8a9b0c1d04",
+                    title: "Stake Partner B Tokens",
+                    taskIcon: <BsCoin />,
+                    points: 200,
+                    url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
+                    onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d04", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 200)
+                }
+            ]
         }
-        acc[task.partnerBg].push(task);
-        return acc;
-    }, {} as Record<string, Task[]>);
+    ];
 
     const handleFollowChannel = (taskId: string, url: string, points: number) => {
         setLoadingTask(taskId);
@@ -163,7 +151,7 @@ const Tasks = () => {
         }, 10000)
     };
 
-    const handleInviteTask = (taskId: string,referCount: number, points: number) => {
+    const handleInviteTask = (taskId: string, referCount: number, points: number) => {
         setLoadingTask(taskId);
         if (referCount === 1) {
             router.push("/frens");
@@ -235,7 +223,7 @@ const Tasks = () => {
                     </ScrollArea>
                 </TabsContent>
                 <TabsContent className='' value='social'>
-                    <ScrollArea className='h-[50dvh] *:my-1 '>
+                    <ScrollArea className='h-[55dvh] *:my-1 '>
                         {socialMediaTasks.map((task) => (
                             <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} points={task.points} />
                         ))}
@@ -243,15 +231,32 @@ const Tasks = () => {
                 </TabsContent>
                 <TabsContent value='partner'>
                     <ScrollArea className='h-[50dvh]'>
-                        {Object.entries(groupedTasks).map(([partnerBg, tasks], index) => (
-                            <div key={index} style={{
-                                backgroundImage: `url(${partnerBg})`,
-                            }} className="my-2 pt-10 *:m-1 p-2 rounded-lg bg-cover bg-center">
-                                {tasks.map((task) => (
-                                    <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} bgColor='bg-black/85' iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} points={task.points} />
-                                ))}
+                        {partnerAirdropTasks !== null ?
+                            partnerAirdropTasks.map((partner, index) => (
+                                <div key={index} style={{
+                                    backgroundImage: `url(${partner.partnerBg})`,
+                                }} className="my-2 *:m-1 p-2 rounded-lg bg-cover bg-center">
+                                    <div className='flex pb-2 items-center gap-2'>
+                                        <div className='w-10 border border-white h-10 rounded-full bg-cover bg-center' style={{
+                                            backgroundImage: `url(${partner.logo})`,
+                                        }}>
+                                        </div>
+                                        <p style={{
+                                            textShadow: '0 0 10px black',
+                                        }} className='text-white font-semibold'>
+                                            {partner.name}
+                                        </p>
+                                    </div>
+                                    {partner.tasks.map((task) => (
+                                        <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} bgColor='bg-black/85' iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} points={task.points} />
+                                    ))}
+                                </div>
+                            ))
+                            : <div className='flex flex-col items-center justify-center h-[50dvh]'>
+                                <Image src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgAD9wADVp29Cg.webp" unoptimized width={150} height={150} alt=""/>
+                                Daily Goals? Crushed. 💪
                             </div>
-                        ))}
+                        }
                     </ScrollArea>
                 </TabsContent>
             </Tabs>

@@ -21,6 +21,7 @@ const Frens = () => {
         <h3 className='text-white text-2xl font-bold'>
           How it works?
         </h3>
+        
         <div className='text-muted-foreground text-sm'>
           <ul>
             <li>Invite more frens to earn more CPs</li>
