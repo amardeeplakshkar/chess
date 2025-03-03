@@ -2,10 +2,18 @@
 import Button from '@/components/Button'
 import CheckpointIcon from '@/components/CheckpointIcon'
 import CurrentChapter from '@/components/CurrentChapter'
+import { useTelegram } from '@/components/providers/TelegramData'
+import Link from 'next/link'
 import React from 'react'
+import toast from 'react-hot-toast'
 import { BsPeopleFill } from 'react-icons/bs'
 
 const Frens = () => {
+  const { userData } = useTelegram()
+  const copyInviteLink = () => {
+    toast.success('Invite link copied to clipboard')
+    navigator.clipboard.writeText(`https://t.me/CheckpointCryptoBot?start=${userData?.id}`)
+  }
   return (
     <div className='h-full w-full flex flex-col p-4'>
       <CurrentChapter />
@@ -49,10 +57,12 @@ const Frens = () => {
       </div>
 
       <div className='text-[.8rem] font-semibold w-full flex mb-8 flex-col gap-2 p-2'>
-        <Button className='bg-white text-black'>
+        <Link href={`https://t.me/share/url?url=https://t.me/CheckpointCryptoBot?start=${userData?.id}`}>
+        <Button className='w-full bg-white text-black'>
           Invite Frens
         </Button>
-        <Button>
+        </Link>
+        <Button onClick={copyInviteLink}>
           Copy Invite Link
         </Button>
       </div>

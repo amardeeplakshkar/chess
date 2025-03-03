@@ -12,13 +12,13 @@ import { checkpoints } from '@/constants'
 const CurrentChapter = () => {
   return (
     <div className='flex w-full justify-between py-2 items-center'>
-      <Button>
+      <Button className='bg-white/10'>
         <CheckpointIcon height={20} width={20} />
         805
       </Button>
       <div className='flex justify-center items-center gap-2'>
         <Drawer>
-          <DrawerTrigger>
+          <DrawerTrigger asChild suppressHydrationWarning>
             <Button2 variant={"outline"} size={"icon"}>
               <CalendarCheck />
             </Button2>
@@ -29,7 +29,7 @@ const CurrentChapter = () => {
                 {
                   checkpoints.map((checkpoint, index) =>
                     <div key={index}>
-                    <CheckInBox day={checkpoint.day} isSpecial={checkpoint.isSpecial} points={checkpoint.number} />
+                      <CheckInBox day={checkpoint.day} bgImage={checkpoint.bgImage} isSpecial={checkpoint.isSpecial} points={checkpoint.number} />
                     </div>
                   )
                 }
@@ -40,7 +40,7 @@ const CurrentChapter = () => {
         <div className='flex relative flex-col text-white text-2xl uppercase font-bold'>
           Chapter 0
           <div className='flex translate-y-8 absolute self-end items-center text-xs gap-2'>
-            <Countdown targetDate="03-03-2025" />
+            <Countdown targetDate="30-03-2025" />
           </div>
         </div>
       </div>
