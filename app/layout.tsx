@@ -19,12 +19,12 @@ export default function RootLayout({
         className={`antialiased overflow-hidden`}
       >
         <Provider>
-          <div className="h-[98dvh] flex flex-col">
-            <div className="flex-1">
-            {children}
+            <div className="h-[98dvh] flex flex-col">
+              <div className="flex-1">
+                {children}
+              </div>
+              <Dock />
             </div>
-            <Dock/>
-          </div>
         </Provider>
       </body>
     </html>
