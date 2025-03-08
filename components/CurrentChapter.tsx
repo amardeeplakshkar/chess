@@ -15,7 +15,7 @@ import { useUser } from './providers/UserProvider'
 const CurrentChapter = () => {
   const { user } = useUser()
   return (
-    <div data-aos="fade-down" data-aos-duration="1000" className='flex w-full justify-between py-2 items-center'>
+    <div className='flex w-full justify-between py-2 items-center'>
       <Button className='bg-white/10'>
         <CheckpointIcon height={20} width={20} />
         {(user?.points || 0).toLocaleString()}

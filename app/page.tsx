@@ -12,9 +12,9 @@ const HomePage = () => {
   return (
     <div className='h-full w-full flex flex-col items-center p-4'>
       <div className='flex-1 flex flex-col w-full'>
-        <div data-aos="fade-down" data-aos-duration="500" className="font-bold uppercase w-full leading-none text-center text-white" style={{ fontSize: '11dvw' }}>Early Access</div>
+        <div className="font-bold uppercase w-full leading-none text-center text-white" style={{ fontSize: '11dvw' }}>Early Access</div>
         <CurrentChapter/>
-        <div data-aos="zoom-out" data-aos-duration="1000" className='flex flex-1 flex-col justify-center items-center'>
+        <div className='flex flex-1 flex-col justify-center items-center'>
           <CheckpointIcon height={200} width={200} />
           <div className="font-bold flex justify-center items-end w-full leading-none text-center text-white" style={{ fontSize: '8dvw' }}>
             {(user?.points || 0).toLocaleString()}&nbsp;
@@ -22,7 +22,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <div data-aos="fade-up" data-aos-duration="1500" className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
+      <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
         <Button onClick={() => router.replace("https://t.me/checkpoint_airdrop")} className='w-full bg-white text-black font-semibold'>
           Join Community
         </Button>

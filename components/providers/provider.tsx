@@ -9,6 +9,7 @@ const UserProviderNoSSR = dynamic(() => import("./UserProvider"), {
 });
 
 export function Provider({ children }: { children: React.ReactNode }) {
+   
     return (
         <TelegramProvider>
             <UserProviderNoSSR>

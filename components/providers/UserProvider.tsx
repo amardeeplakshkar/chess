@@ -11,8 +11,6 @@ interface UserContextType {
   error: string | null;
   startParam: string;
 }
-import 'aos/dist/aos.css'; 
-import AOS from 'aos';
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -22,12 +20,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const [loading, setLoading] = useState(true);
   const [startParam, setStartParam] = useState('');
   const router = useRouter();
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-        AOS.init(); // Run AOS only on the client
-    }
-}, []);
 
   useEffect(() => {
     if (WebApp) {
