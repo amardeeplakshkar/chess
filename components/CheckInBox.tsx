@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import CheckpointIcon from "./CheckpointIcon";
 import { Check, Loader } from "lucide-react";
+import toast from "react-hot-toast";
+import { useUser } from "./providers/UserProvider";
 
 interface CheckInBoxProps {
   day: string;
@@ -15,6 +17,7 @@ interface CheckInBoxProps {
 const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed: initialIsClaimed, bgImage, isSpecial,checkpointId, day, points, userId }) => {
   const [isClaimed, setIsClaimed] = useState(initialIsClaimed);
   const [loading, setLoading] = useState(false);
+  const {updateUser} = useUser()
 
   const handleCheckIn = async (userId: number, checkpointId: string, points: number) => {
     if (isClaimed || loading) return;
@@ -32,12 +35,16 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed: initialIsClaimed, bg
 
       if (response.ok) {
         setIsClaimed(true);
-        console.log(`Check-in successful! New Points: ${data.points}, Streak: ${data.streak}`);
+        updateUser({
+            points,
+            claimedCheckpoints: [checkpointId],
+        });
+        toast.success(`Check-in successful! New Points: ${data.points}, Streak: ${data.streak}`);
       } else {
-        console.error(`Error: ${data.error}`);
+        toast.error(`Error: ${data.error}`);
       }
     } catch (error) {
-      console.error("Check-in failed:", error);
+      toast.error(`Check-in failed: ${error}`);
     } finally {
       setLoading(false);
     }

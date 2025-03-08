@@ -33,7 +33,7 @@ const CurrentChapter = () => {
                 {
                   checkpoints.map((checkpoint, index) =>
                     <div key={index}>
-                      <CheckInBox userId={user?.telegramId || 0} checkpointId={checkpoint.id} day={checkpoint.day} bgImage={checkpoint.bgImage} isSpecial={checkpoint.isSpecial} points={checkpoint.number} />
+                      <CheckInBox isClaimed={user?.claimedCheckpoints?.includes(checkpoint.id)} userId={user?.telegramId || 0} checkpointId={checkpoint.id} day={checkpoint.day} bgImage={checkpoint.bgImage} isSpecial={checkpoint.isSpecial} points={checkpoint.number} />
                     </div>
                   )
                 }

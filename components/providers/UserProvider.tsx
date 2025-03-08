@@ -10,7 +10,7 @@ interface UserContextType {
   loading: boolean;
   error: string | null;
   startParam: string;
-  updateUser: (updates: Partial<{ points: number; completedTaskIds: string[] }>) => void;
+  updateUser: (updates: Partial<{ points: number; completedTaskIds?: string[];claimedCheckpoints?: string[]; }>) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -22,12 +22,13 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const [startParam, setStartParam] = useState('');
   const router = useRouter();
 
-  const updateUser = (updates: Partial<{ points: number; completedTaskIds: string[] }>) => {
-    setUser((prevUser: { points: number; completedTaskIds: string[]; }) => ({
+  const updateUser = (updates: Partial<{ points: number; completedTaskIds: string[];claimedCheckpoints?: string[]; }>) => {
+    setUser((prevUser: { points: number; completedTaskIds: string[]; claimedCheckpoints?: string[]; }) => ({
       ...prevUser!,
       ...updates,
       points: (prevUser?.points || 0) + (updates.points || 0),
       completedTaskIds: [...(prevUser?.completedTaskIds || []), ...(updates.completedTaskIds || [])],
+      claimedCheckpoints: [...(prevUser?.claimedCheckpoints || []), ...(updates.claimedCheckpoints || [])],
     }));}
 
     useEffect(() => {
