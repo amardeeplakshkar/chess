@@ -14,8 +14,7 @@ interface CheckInBoxProps {
   checkpointId: string;
 }
 
-const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed: initialIsClaimed, bgImage, isSpecial,checkpointId, day, points, userId }) => {
-  const [isClaimed, setIsClaimed] = useState(initialIsClaimed);
+const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial,checkpointId, day, points, userId }) => {
   const [loading, setLoading] = useState(false);
   const {updateUser} = useUser()
 
@@ -34,7 +33,6 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed: initialIsClaimed, bg
       const data = await response.json();
 
       if (response.ok) {
-        setIsClaimed(true);
         updateUser({
             points,
             claimedCheckpoints: [checkpointId],
