@@ -12,7 +12,7 @@ const Frens = () => {
   const { userData } = useTelegram()
   const copyInviteLink = () => {
     toast.success('Invite link copied to clipboard')
-    navigator.clipboard.writeText(`https://t.me/CheckpointCryptoBot?start=${userData?.id}`)
+    navigator.clipboard.writeText(`https://t.me/CheckpointCryptoBot?start=${userData?.userId}`)
   }
   return (
     <div className='h-full w-full flex flex-col p-4'>
@@ -58,7 +58,7 @@ const Frens = () => {
       </div>
 
       <div className='text-[.8rem] font-semibold w-full flex mb-8 flex-col gap-2 p-2'>
-        <Link href={`https://t.me/share/url?url=https://t.me/CheckpointCryptoBot?start=${userData?.id}`}>
+        <Link href={`https://t.me/share/url?url=https://t.me/CheckpointCryptoBot?start=${userData?.userId}`}>
         <Button className='w-full bg-white text-black'>
           Invite Frens
         </Button>
