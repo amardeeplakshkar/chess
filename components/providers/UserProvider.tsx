@@ -73,7 +73,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   }, [router, WebApp, userData]);
 
   if (loading) return <>Loading</>;
-  if (!error) return <div className="flex justify-center p-4 mx-auto text-red-500">{error}</div>;
+  if (error) return <div className="flex justify-center p-4 mx-auto text-red-500">{error}</div>;
 
   return (
     <UserContext.Provider value={{ user, loading, error, startParam }}>
