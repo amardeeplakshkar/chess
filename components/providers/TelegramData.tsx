@@ -26,6 +26,7 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [WebApp, setWebApp] = useState<any | null>(null);
+  const [minimumLoad, setMinimumLoad] = useState<boolean>(true);
 
   useEffect(() => {
     const initTelegramApp = async () => {
@@ -61,10 +62,14 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
     };
 
     initTelegramApp();
+
+    const timeout = setTimeout(() => setMinimumLoad(false), 1500);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
-    <TelegramContext.Provider value={{ userData, loading, error, WebApp }}>
+    <TelegramContext.Provider value={{ userData, loading: loading || minimumLoad, error, WebApp }}>
       {children}
     </TelegramContext.Provider>
   );
