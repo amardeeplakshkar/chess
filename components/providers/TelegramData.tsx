@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
@@ -15,6 +16,7 @@ interface TelegramContextType {
   userData: UserData | null;
   loading: boolean;
   error: string | null;
+  WebApp: any | null;
 }
 
 const TelegramContext = createContext<TelegramContextType | undefined>(undefined);
@@ -23,15 +25,18 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [WebApp, setWebApp] = useState<any | null>(null);
 
   useEffect(() => {
     const initTelegramApp = async () => {
       try {
         if (typeof window !== "undefined") {
-          const WebApp = (await import("@twa-dev/sdk")).default;
-          WebApp.ready();
+          const importedWebApp = (await import("@twa-dev/sdk")).default;
+          importedWebApp.ready();
 
-          const user = WebApp.initDataUnsafe?.user;
+          setWebApp(importedWebApp); // Store WebApp in state
+
+          const user = importedWebApp.initDataUnsafe?.user;
           if (user) {
             const userInfo: UserData = {
               id: user?.id?.toString() || "",
@@ -59,7 +64,7 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
   }, []);
 
   return (
-    <TelegramContext.Provider value={{ userData, loading, error }}>
+    <TelegramContext.Provider value={{ userData, loading, error, WebApp }}>
       {children}
     </TelegramContext.Provider>
   );
