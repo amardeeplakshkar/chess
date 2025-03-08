@@ -2,6 +2,7 @@
 
 import CurrentChapter from '@/components/CurrentChapter';
 import { useTelegram } from '@/components/providers/TelegramData';
+import { useUser } from '@/components/providers/UserProvider';
 import TaskCard from '@/components/TaskCard'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -13,10 +14,21 @@ import { BsCoin, BsGift, BsTelegram, BsPersonCheck } from "react-icons/bs";
 import { BsShare, BsHeartFill, BsChatDotsFill, BsGlobe } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
 
+type Task = {
+    id: string;
+    title: string;
+    taskIcon: React.ReactNode;
+    url: string;
+    points: number;
+    onClick: () => void;
+};
+
+
 const Tasks = () => {
     const { userData } = useTelegram()
     const [loadingTask, setLoadingTask] = useState<string | null>(null);
     const router = useRouter()
+    const {user,updateUser} = useUser()
     const limitedTasks = [
         {
             id: "IN2a1b3c4d6e7f8a9b0c1d01",
@@ -180,6 +192,11 @@ const Tasks = () => {
 
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || "Task failed.");
+            
+            updateUser({
+                points,
+                completedTaskIds: [taskId],
+              });
 
             toast.success("Task completed successfully!");
             setLoadingTask(null);
@@ -218,14 +235,14 @@ const Tasks = () => {
                 <TabsContent className='' value='limited'>
                     <ScrollArea className='h-[50dvh] *:my-1'>
                         {limitedTasks.map((task) => (
-                            <TaskCard onClick={task.onClick} isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} points={task.points} />
+                            <TaskCard onClick={task.onClick} isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} isCompleted={user?.completedTaskIds.includes(task.id)} taskIcon={task.taskIcon} points={task.points} />
                         ))}
                     </ScrollArea>
                 </TabsContent>
                 <TabsContent className='' value='social'>
                     <ScrollArea className='h-[55dvh] *:my-1 '>
                         {socialMediaTasks.map((task) => (
-                            <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} points={task.points} />
+                            <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} isCompleted={user?.completedTaskIds.includes(task.id)} onClick={task.onClick} points={task.points} />
                         ))}
                     </ScrollArea>
                 </TabsContent>
@@ -247,8 +264,8 @@ const Tasks = () => {
                                             {partner.name}
                                         </p>
                                     </div>
-                                    {partner.tasks.map((task) => (
-                                        <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} bgColor='bg-black/85' iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} points={task.points} />
+                                    {partner.tasks.map((task: Task) => (
+                                        <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} bgColor='bg-black/85' iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} isCompleted={user?.completedTaskIds.includes(task.id)} points={task.points} />
                                     ))}
                                 </div>
                             ))
