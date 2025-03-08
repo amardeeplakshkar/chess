@@ -19,7 +19,6 @@ const HomePage = () => {
           <div className="font-bold flex justify-center items-end w-full leading-none text-center text-white" style={{ fontSize: '8dvw' }}>
             {(user?.points || 0).toLocaleString()}&nbsp;
             <span className='text-base'>CPs</span>
-            {user ? JSON.stringify(user, null, 2) : null}
           </div>
         </div>
       </div>

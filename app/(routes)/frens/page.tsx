@@ -3,12 +3,14 @@ import Button from '@/components/Button'
 import CheckpointIcon from '@/components/CheckpointIcon'
 import CurrentChapter from '@/components/CurrentChapter'
 import { useTelegram } from '@/components/providers/TelegramData'
+import { useUser } from '@/components/providers/UserProvider'
 import Link from 'next/link'
 import React from 'react'
 import toast from 'react-hot-toast'
 import { BsPeopleFill } from 'react-icons/bs'
 
 const Frens = () => {
+  const {user} = useUser()
   const { userData } = useTelegram()
   const copyInviteLink = () => {
     toast.success('Invite link copied to clipboard')
@@ -21,7 +23,9 @@ const Frens = () => {
         <h3 className='text-white text-2xl font-bold'>
           How it works?
         </h3>
-        
+        <pre className='text-sm overflow-auto'>
+        {user ? JSON.stringify(user, null, 2) : null}
+        </pre>
         <div className='text-muted-foreground text-sm'>
           <ul>
             <li>Invite more frens to earn more CPs</li>

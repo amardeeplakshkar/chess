@@ -11,6 +11,9 @@ interface User {
   photoUrl: string;
   hasClaimedWelcomePoints: boolean;
   isPremium: boolean;
+  streak: number;
+  lastCheckIn?: Date;
+  claimedCheckpoints: string[];
   taskCompletions?: { taskId: string }[];
 }
 
@@ -47,6 +50,9 @@ export async function GET(req: Request): Promise<NextResponse> {
       isPremium: user.isPremium,
       photoUrl: user.photoUrl,
       hasClaimedWelcomePoints: user.hasClaimedWelcomePoints,
+      streak: user.streak,
+      lastCheckIn: user.lastCheckIn,
+      claimedCheckpoints: user.claimedCheckpoints,
       completedTaskIds,
     });
   } catch (error) {
@@ -86,6 +92,9 @@ export async function POST(req: Request): Promise<NextResponse> {
           points: 0,
           photoUrl: userData.photoUrl || "",
           hasClaimedWelcomePoints: false,
+          streak: 0,
+          lastCheckIn: null,
+          claimedCheckpoints: [],
         },
       });
     }
@@ -101,6 +110,9 @@ export async function POST(req: Request): Promise<NextResponse> {
       photoUrl: user.photoUrl,
       isPremium: user.isPremium,
       hasClaimedWelcomePoints: user.hasClaimedWelcomePoints,
+      streak: user.streak,
+      lastCheckIn: user.lastCheckIn,
+      claimedCheckpoints: user.claimedCheckpoints,
       completedTaskIds,
     });
   } catch (error) {
