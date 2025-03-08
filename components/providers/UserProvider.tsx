@@ -3,20 +3,18 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useTelegram } from './TelegramData';
-import Loader from '../Loader';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-
-// Define User Context Type
+import dynamic from 'next/dynamic';
 interface UserContextType {
   user: any;
   loading: boolean;
   error: string | null;
   startParam: string;
 }
-
-// Create UserContext
 const UserContext = createContext<UserContextType | undefined>(undefined);
+
+const Loader = dynamic(() => import('../Loader'), { ssr: false });
 
 const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { userData, WebApp } = useTelegram();
@@ -26,7 +24,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const [startParam, setStartParam] = useState('');
   const router = useRouter();
 
-  // Initialize WebApp & start_param
   useEffect(() => {
     if (WebApp) {
       const startParam = WebApp.initDataUnsafe?.start_param || '';
@@ -34,7 +31,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     }
   }, [WebApp]);
 
-  // Fetch User Data
   useEffect(() => {
     const fetchUserData = async () => {
       if (!WebApp || !userData) {
@@ -88,8 +84,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     </UserContext.Provider>
   );
 };
-
-// Hook to use UserContext
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {
