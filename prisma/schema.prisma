@@ -8,41 +8,45 @@ generator client {
 }
 
 model User {
-  id                     String           @id @default(auto()) @map("_id") @db.ObjectId
-  telegramId             Int              @unique
-  username               String?
-  firstName              String?
-  lastName               String?
-  isPremium Boolean          @default(false)
-  photoUrl               String?
-  points                 Int              @default(0)
+  id                      String           @id @default(auto()) @map("_id") @db.ObjectId
+  telegramId              Int              @unique
+  username                String?
+  firstName               String?
+  lastName                String?
+  isPremium               Boolean          @default(false)
+  photoUrl                String?
+  points                  Int              @default(0)
   hasClaimedWelcomePoints Boolean          @default(false)
-  isNewUser              Boolean          @default(true)
-  createdAt              DateTime         @default(now())
-  updatedAt              DateTime         @updatedAt
-  dailyPlays             Int              @default(0)
-  lastPlayedDate         DateTime?
-  walletAddress          String?          // Store connected TON wallet address
-  isWalletConnected      Boolean          @default(false)
-  taskCompletions        TaskCompletion[] // Relation to track task completions
+  isNewUser               Boolean          @default(true)
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  dailyPlays              Int              @default(0)
+  lastPlayedDate          DateTime?
+  walletAddress           String? // Store connected TON wallet address
+  isWalletConnected       Boolean          @default(false)
+  taskCompletions         TaskCompletion[] // Relation to track task completions
 
-  referrals               User[]           @relation("UserReferrals")
-  referredBy              User?            @relation("UserReferrals", fields: [referredByTelegramId], references: [telegramId], onDelete: NoAction, onUpdate: NoAction)
-  referredByTelegramId    Int?          
+  referrals            User[] @relation("UserReferrals")
+  referredBy           User?  @relation("UserReferrals", fields: [referredByTelegramId], references: [telegramId], onDelete: NoAction, onUpdate: NoAction)
+  referredByTelegramId Int?
+
+  streak           Int      @default(0)
+  lastCheckIn      DateTime? 
+  claimedCheckpoints String[] @default([])
 }
 
 model Task {
-  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   points    Int
-  completed Boolean       @default(false)
+  completed Boolean          @default(false)
   users     TaskCompletion[] // Relation for many-to-many
 }
 
 model TaskCompletion {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier
-  userId    String   // Reference to User
-  taskId    String   // Reference to Task
+  userId    String // Reference to User
+  taskId    String // Reference to Task
   completed DateTime @default(now()) // Timestamp of when the task was completed
 
   user User @relation(fields: [userId], references: [id])

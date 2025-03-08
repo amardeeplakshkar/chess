@@ -33,7 +33,7 @@ const CurrentChapter = () => {
                 {
                   checkpoints.map((checkpoint, index) =>
                     <div key={index}>
-                      <CheckInBox day={checkpoint.day} bgImage={checkpoint.bgImage} isSpecial={checkpoint.isSpecial} points={checkpoint.number} />
+                      <CheckInBox userId={user?.telegramId || 0} checkpointId={checkpoint.id} day={checkpoint.day} bgImage={checkpoint.bgImage} isSpecial={checkpoint.isSpecial} points={checkpoint.number} />
                     </div>
                   )
                 }
