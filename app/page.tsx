@@ -7,18 +7,19 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 
 const HomePage = () => {
-  const {user} = useUser()
+  const { user } = useUser()
   const router = useRouter()
   return (
     <div className='h-full w-full flex flex-col items-center p-4'>
       <div className='flex-1 flex flex-col w-full'>
         <div className="font-bold uppercase w-full leading-none text-center text-white" style={{ fontSize: '11dvw' }}>Early Access</div>
-        <CurrentChapter/>
+        <CurrentChapter />
         <div className='flex flex-1 flex-col justify-center items-center'>
           <CheckpointIcon height={200} width={200} />
           <div className="font-bold flex justify-center items-end w-full leading-none text-center text-white" style={{ fontSize: '8dvw' }}>
             {(user?.points || 0).toLocaleString()}&nbsp;
             <span className='text-base'>CPs</span>
+            {user ? JSON.stringify(user, null, 2) : null}
           </div>
         </div>
       </div>
