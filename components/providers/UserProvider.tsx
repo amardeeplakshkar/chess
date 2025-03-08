@@ -5,7 +5,6 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useTelegram } from './TelegramData';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
 interface UserContextType {
   user: any;
   loading: boolean;
@@ -13,9 +12,6 @@ interface UserContextType {
   startParam: string;
 }
 const UserContext = createContext<UserContextType | undefined>(undefined);
-
-const Loader = dynamic(() => import('../Loader'), { ssr: false });
-
 const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { userData, WebApp } = useTelegram();
   const [user, setUser] = useState<any | null>(null);
@@ -75,7 +71,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     fetchUserData();
   }, [router, WebApp, userData]);
 
-  if (loading) return <Loader />;
+  if (loading) return <>Loading</>;
   if (error) return <div className="flex justify-center p-4 mx-auto text-red-500">{error}</div>;
 
   return (
