@@ -80,7 +80,7 @@ const LoaderProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <div>
             <pre>
-                {user ? JSON.stringify(userData, null, 2) : null}
+                {user ? JSON.stringify(user, null, 2) : null}
                 {startParam ? JSON.stringify(startParam, null, 2) : null}
             </pre>
             {children}
