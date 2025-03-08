@@ -4,12 +4,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface UserData {
-  id: string;
+  userId: number;
   firstName?: string;
   lastName?: string;
   username?: string;
-  is_premium?: boolean;
-  photo_url?: string;
+  isPremium?: boolean;
+  photoUrl?: string;
 }
 
 interface TelegramContextType {
@@ -39,12 +39,12 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
           const user = importedWebApp.initDataUnsafe?.user;
           if (user) {
             const userInfo: UserData = {
-              id: user?.id?.toString() || "",
+              userId: user?.id || 0,
               firstName: user?.first_name || "",
               lastName: user?.last_name || "",
               username: user?.username || "",
-              is_premium: user?.is_premium || false,
-              photo_url: user?.photo_url || "",
+              isPremium: user?.is_premium || false,
+              photoUrl: user?.photo_url || "",
             };
 
             setUserData(userInfo);
