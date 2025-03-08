@@ -175,7 +175,7 @@ const Tasks = () => {
             const response = await fetch("/api/complete-task", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId: userData?.id, taskId, points }),
+                body: JSON.stringify({ userId: userData?.userId, taskId, points }),
             });
 
             const data = await response.json();
