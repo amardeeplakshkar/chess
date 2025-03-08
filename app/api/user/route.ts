@@ -3,14 +3,14 @@ import { prisma } from "../../../lib/prisma";
 
 // Define types for request and response
 interface User {
-  telegramId: number;
+  userId: number;
   username: string;
   firstName: string;
   lastName: string;
   points: number;
   photoUrl: string;
   hasClaimedWelcomePoints: boolean;
-  dailyPlays: number;
+  isPremium: boolean;
   taskCompletions?: { taskId: string }[];
 }
 
@@ -44,9 +44,9 @@ export async function GET(req: Request): Promise<NextResponse> {
       firstName: user.firstName,
       lastName: user.lastName,
       points: user.points,
+      isPremium: user.isPremium,
       photoUrl: user.photoUrl,
       hasClaimedWelcomePoints: user.hasClaimedWelcomePoints,
-      dailyPlays: user.dailyPlays,
       completedTaskIds,
     });
   } catch (error) {
@@ -63,7 +63,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   try {
     const userData: Partial<User> = await req.json();
 
-    if (!userData || !userData.telegramId) {
+    if (!userData || !userData.userId) {
       return NextResponse.json(
         { error: "Invalid user data: telegramId is missing" },
         { status: 400 }
@@ -71,21 +71,21 @@ export async function POST(req: Request): Promise<NextResponse> {
     }
 
     let user = await prisma.user.findUnique({
-      where: { telegramId: userData.telegramId },
+      where: { telegramId: userData.userId },
       include: { taskCompletions: true },
     });
 
     if (!user) {
       user = await prisma.user.create({
         data: {
-          telegramId: userData.telegramId,
+          telegramId: userData.userId,
           username: userData.username || "",
           firstName: userData.firstName || "",
           lastName: userData.lastName || "",
+          isPremium: userData.isPremium || false,
           points: 0,
           photoUrl: userData.photoUrl || "",
           hasClaimedWelcomePoints: false,
-          dailyPlays: 0,
         },
       });
     }
@@ -99,8 +99,8 @@ export async function POST(req: Request): Promise<NextResponse> {
       lastName: user.lastName,
       points: user.points,
       photoUrl: user.photoUrl,
+      isPremium: user.isPremium,
       hasClaimedWelcomePoints: user.hasClaimedWelcomePoints,
-      dailyPlays: user.dailyPlays,
       completedTaskIds,
     });
   } catch (error) {

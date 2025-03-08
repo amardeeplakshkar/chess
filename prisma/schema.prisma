@@ -13,6 +13,7 @@ model User {
   username               String?
   firstName              String?
   lastName               String?
+  isPremium Boolean          @default(false)
   photoUrl               String?
   points                 Int              @default(0)
   hasClaimedWelcomePoints Boolean          @default(false)
