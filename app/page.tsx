@@ -2,10 +2,12 @@
 import Button from '@/components/Button'
 import CheckpointIcon from '@/components/CheckpointIcon'
 import CurrentChapter from '@/components/CurrentChapter'
+import { useUser } from '@/components/providers/UserProvider'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
 const HomePage = () => {
+  const {user} = useUser()
   const router = useRouter()
   return (
     <div className='h-full w-full flex flex-col items-center p-4'>
@@ -15,7 +17,7 @@ const HomePage = () => {
         <div className='flex flex-1 flex-col justify-center items-center'>
           <CheckpointIcon height={200} width={200} />
           <div className="font-bold flex justify-center items-end w-full leading-none text-center text-white" style={{ fontSize: '8dvw' }}>
-            2500&nbsp;
+            {(user?.points || 0).toLocaleString()}&nbsp;
             <span className='text-base'>CPs</span>
           </div>
         </div>

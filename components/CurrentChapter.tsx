@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import CheckpointIcon from './CheckpointIcon'
 import Button from './Button'
@@ -8,13 +10,15 @@ import { Drawer, DrawerContent, DrawerTrigger } from './ui/drawer'
 import { CheckInBox } from './CheckInBox'
 import { ScrollArea } from './ui/scroll-area'
 import { checkpoints } from '@/constants'
+import { useUser } from './providers/UserProvider'
 
 const CurrentChapter = () => {
+  const { user } = useUser()
   return (
     <div className='flex w-full justify-between py-2 items-center'>
       <Button className='bg-white/10'>
         <CheckpointIcon height={20} width={20} />
-        805
+        {(user?.points || 0).toLocaleString()}
       </Button>
       <div className='flex justify-center items-center gap-2'>
         <Drawer>

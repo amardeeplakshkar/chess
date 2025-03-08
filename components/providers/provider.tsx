@@ -4,14 +4,14 @@ import { TelegramProvider } from "./TelegramData";
 import { Toaster } from "react-hot-toast";
 import dynamic from "next/dynamic";
 
-const LoaderProviderNoSSR = dynamic(() => import("./LoaderProvider"), {
+const UserProviderNoSSR = dynamic(() => import("./UserProvider"), {
     ssr: false,
 });
 
 export function Provider({ children }: { children: React.ReactNode }) {
     return (
         <TelegramProvider>
-            <LoaderProviderNoSSR>
+            <UserProviderNoSSR>
                 <Toaster containerStyle={{
                     fontSize: "0.8rem",
                 }} position="top-center" reverseOrder={false} />
@@ -21,7 +21,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
                     <div className="relative -z-50" id="stars"></div>
                     {children}
                 </TonConnectUIProvider>
-            </LoaderProviderNoSSR>
+            </UserProviderNoSSR>
         </TelegramProvider>
     )
 }
