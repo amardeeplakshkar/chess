@@ -195,7 +195,8 @@ const Tasks = () => {
     return (
         <div className='h-full w-full flex flex-col p-4 gap-2'>
             <CurrentChapter />
-            <div className='pb-2'>
+            <div data-aos="fade-up"
+                data-aos-duration="1000" className='pb-2'>
                 <h3 className='text-white text-2xl font-bold'>
                     Boost CPs
                 </h3>
@@ -203,63 +204,66 @@ const Tasks = () => {
                     Complete tasks to earn more CPs
                 </p>
             </div>
-            <Tabs defaultValue='limited'>
-                <TabsList className='bg-[#141414] grid rounded-full w-full grid-cols-3'>
-                    <TabsTrigger className='rounded-full' value='limited'>
-                        Limited
-                    </TabsTrigger>
-                    <TabsTrigger className='rounded-full' value='social'>
-                        Community
-                    </TabsTrigger>
-                    <TabsTrigger className='rounded-full' value='partner'>
-                        Partners
-                    </TabsTrigger>
-                </TabsList>
-                <TabsContent className='' value='limited'>
-                    <ScrollArea className='h-[50dvh] *:my-1'>
-                        {limitedTasks.map((task) => (
-                            <TaskCard onClick={task.onClick} isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} points={task.points} />
-                        ))}
-                    </ScrollArea>
-                </TabsContent>
-                <TabsContent className='' value='social'>
-                    <ScrollArea className='h-[55dvh] *:my-1 '>
-                        {socialMediaTasks.map((task) => (
-                            <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} points={task.points} />
-                        ))}
-                    </ScrollArea>
-                </TabsContent>
-                <TabsContent value='partner'>
-                    <ScrollArea className='h-[50dvh]'>
-                        {partnerAirdropTasks !== null ?
-                            partnerAirdropTasks.map((partner, index) => (
-                                <div key={index} style={{
-                                    backgroundImage: `url(${partner.partnerBg})`,
-                                }} className="my-2 *:m-1 p-2 rounded-lg bg-cover bg-center">
-                                    <div className='flex pb-2 items-center gap-2'>
-                                        <div className='w-10 border border-white h-10 rounded-full bg-cover bg-center' style={{
-                                            backgroundImage: `url(${partner.logo})`,
-                                        }}>
+            <div data-aos="fade-up"
+                data-aos-duration="1200">
+                <Tabs defaultValue='limited'>
+                    <TabsList className='bg-[#141414] grid rounded-full w-full grid-cols-3'>
+                        <TabsTrigger className='rounded-full' value='limited'>
+                            Limited
+                        </TabsTrigger>
+                        <TabsTrigger className='rounded-full' value='social'>
+                            Community
+                        </TabsTrigger>
+                        <TabsTrigger className='rounded-full' value='partner'>
+                            Partners
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent className='' value='limited'>
+                        <ScrollArea className='h-[50dvh] *:my-1'>
+                            {limitedTasks.map((task) => (
+                                <TaskCard onClick={task.onClick} isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} points={task.points} />
+                            ))}
+                        </ScrollArea>
+                    </TabsContent>
+                    <TabsContent className='' value='social'>
+                        <ScrollArea className='h-[55dvh] *:my-1 '>
+                            {socialMediaTasks.map((task) => (
+                                <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} points={task.points} />
+                            ))}
+                        </ScrollArea>
+                    </TabsContent>
+                    <TabsContent value='partner'>
+                        <ScrollArea className='h-[50dvh]'>
+                            {partnerAirdropTasks !== null ?
+                                partnerAirdropTasks.map((partner, index) => (
+                                    <div key={index} style={{
+                                        backgroundImage: `url(${partner.partnerBg})`,
+                                    }} className="my-2 *:m-1 p-2 rounded-lg bg-cover bg-center">
+                                        <div className='flex pb-2 items-center gap-2'>
+                                            <div className='w-10 border border-white h-10 rounded-full bg-cover bg-center' style={{
+                                                backgroundImage: `url(${partner.logo})`,
+                                            }}>
+                                            </div>
+                                            <p style={{
+                                                textShadow: '0 0 10px black',
+                                            }} className='text-white font-semibold'>
+                                                {partner.name}
+                                            </p>
                                         </div>
-                                        <p style={{
-                                            textShadow: '0 0 10px black',
-                                        }} className='text-white font-semibold'>
-                                            {partner.name}
-                                        </p>
+                                        {partner.tasks.map((task) => (
+                                            <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} bgColor='bg-black/85' iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} points={task.points} />
+                                        ))}
                                     </div>
-                                    {partner.tasks.map((task) => (
-                                        <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} bgColor='bg-black/85' iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} points={task.points} />
-                                    ))}
+                                ))
+                                : <div className='flex flex-col items-center justify-center h-[50dvh]'>
+                                    <Image src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgAD9wADVp29Cg.webp" unoptimized width={150} height={150} alt="" />
+                                    Daily Goals? Crushed. 💪
                                 </div>
-                            ))
-                            : <div className='flex flex-col items-center justify-center h-[50dvh]'>
-                                <Image src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgAD9wADVp29Cg.webp" unoptimized width={150} height={150} alt=""/>
-                                Daily Goals? Crushed. 💪
-                            </div>
-                        }
-                    </ScrollArea>
-                </TabsContent>
-            </Tabs>
+                            }
+                        </ScrollArea>
+                    </TabsContent>
+                </Tabs>
+            </div>
         </div>
     )
 }

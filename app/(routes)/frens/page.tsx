@@ -17,11 +17,12 @@ const Frens = () => {
   return (
     <div className='h-full w-full flex flex-col p-4'>
       <CurrentChapter />
-      <div className='pb-2'>
+      <div data-aos="fade-up"
+        data-aos-duration="1000" className='pb-2'>
         <h3 className='text-white text-2xl font-bold'>
           How it works?
         </h3>
-        
+
         <div className='text-muted-foreground text-sm'>
           <ul>
             <li>Invite more frens to earn more CPs</li>
@@ -30,7 +31,8 @@ const Frens = () => {
           </ul>
         </div>
       </div>
-      <div className='flex-1 flex justify-center items-center w-full'>
+      <div data-aos="fade-up"
+        data-aos-duration="1200" className='flex-1 flex justify-center items-center w-full'>
         <div className='flex flex-col bg-[#141414]/80 overflow-hidden w-full rounded-lg justify-between items-center my-6 gap-2'>
           <div className='p-4 border-b w-full backdrop-blur-sm flex font-semibold items-center justify-between gap-2'>
             <div className='flex items-center gap-2'>
@@ -57,11 +59,12 @@ const Frens = () => {
         </div>
       </div>
 
-      <div className='text-[.8rem] font-semibold w-full flex mb-8 flex-col gap-2 p-2'>
+      <div data-aos="fade-up"
+        data-aos-duration="1500" className='text-[.8rem] font-semibold w-full flex mb-8 flex-col gap-2 p-2'>
         <Link href={`https://t.me/share/url?url=https://t.me/CheckpointCryptoBot?start=${userData?.userId}`}>
-        <Button className='w-full bg-white text-black'>
-          Invite Frens
-        </Button>
+          <Button className='w-full bg-white text-black'>
+            Invite Frens
+          </Button>
         </Link>
         <Button onClick={copyInviteLink}>
           Copy Invite Link

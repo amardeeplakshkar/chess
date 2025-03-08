@@ -16,6 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
       <body
         className={`antialiased overflow-hidden`}
       >
@@ -24,13 +25,17 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
         <Provider>
-            <div className="h-[98dvh] flex flex-col">
-              <div className="flex-1">
-                {children}
-              </div>
-              <Dock />
+          <div className="h-[98dvh] flex flex-col">
+            <div className="flex-1">
+              {children}
             </div>
+            <Dock />
+          </div>
         </Provider>
+        <Script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></Script>
+        <script>
+          AOS.init();
+        </script>
       </body>
     </html>
   );

@@ -11,6 +11,9 @@ interface UserContextType {
   error: string | null;
   startParam: string;
 }
+import 'aos/dist/aos.css'; 
+import AOS from 'aos';
+
 const UserContext = createContext<UserContextType | undefined>(undefined);
 const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { userData, WebApp } = useTelegram();
@@ -21,6 +24,12 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const router = useRouter();
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+        AOS.init(); // Run AOS only on the client
+    }
+}, []);
+
+  useEffect(() => {
     if (WebApp) {
       const startParam = WebApp.initDataUnsafe?.start_param || '';
       setStartParam(startParam);
@@ -29,7 +38,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!WebApp || !userData) {
+      if (!userData) {
         setError("No user data available");
         toast.error("No user data available");
         setLoading(false);
@@ -72,7 +81,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   }, [router, WebApp, userData]);
 
   if (loading) return <>Loading</>;
-  if (error) return <div className="flex justify-center p-4 mx-auto text-red-500">{error}</div>;
+  if (!error) return <div className="flex justify-center p-4 mx-auto text-red-500">{error}</div>;
 
   return (
     <UserContext.Provider value={{ user, loading, error, startParam }}>
