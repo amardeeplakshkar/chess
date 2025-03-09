@@ -15,6 +15,7 @@ interface User {
   lastCheckIn?: Date;
   claimedCheckpoints: string[];
   taskCompletions?: { taskId: string }[];
+  lastClaimedDay: string;
 }
 
 // GET user with completed tasks
@@ -53,6 +54,7 @@ export async function GET(req: Request): Promise<NextResponse> {
       streak: user.streak,
       lastCheckIn: user.lastCheckIn,
       claimedCheckpoints: user.claimedCheckpoints,
+      lastClaimedDay: user.lastClaimedDay,
       completedTaskIds,
     });
   } catch (error) {
@@ -94,6 +96,7 @@ export async function POST(req: Request): Promise<NextResponse> {
           hasClaimedWelcomePoints: false,
           streak: 0,
           lastCheckIn: null,
+          lastClaimedDay: "Day 01",
           claimedCheckpoints: [],
         },
       });
@@ -112,6 +115,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       hasClaimedWelcomePoints: user.hasClaimedWelcomePoints,
       streak: user.streak,
       lastCheckIn: user.lastCheckIn,
+      lastClaimedDay: user.lastClaimedDay,
       claimedCheckpoints: user.claimedCheckpoints,
       completedTaskIds,
     });

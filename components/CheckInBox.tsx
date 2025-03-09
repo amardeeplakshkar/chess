@@ -1,4 +1,3 @@
-'use client'
 import React, { useState } from "react";
 import CheckpointIcon from "./CheckpointIcon";
 import { Check, Loader } from "lucide-react";
@@ -17,7 +16,19 @@ interface CheckInBoxProps {
 
 const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, checkpointId, day, points, userId }) => {
   const [loading, setLoading] = useState(false);
-  const { updateUser } = useUser();
+  const { user, updateUser } = useUser();
+
+  // Determine if this checkpoint is claimable today
+  const isClaimableToday = () => {
+    if (!user?.lastClaimedDay) {
+      return day === "Day 01";
+    }
+
+    const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1]);
+    const thisDayNumber = parseInt(day.split(" ")[1]);
+    
+    return thisDayNumber === currentDayNumber + 1;
+  };
 
   const handleCheckIn = async (userId: number, checkpointId: string, points: number, day: string) => {
     if (isClaimed || loading) return;
@@ -60,13 +71,19 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, 
         </div>
       ) : (
         <div
-          className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""}`}
-          style={isSpecial && bgImage ? { backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center" } : { backgroundColor: "#141414" }}
+          className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""} ${isClaimableToday() ? "bg-red-500" : ""}`}
+          style={
+            isClaimableToday() 
+              ? {} 
+              : isSpecial && bgImage 
+                ? { backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center" } 
+                : { backgroundColor: "#141414" }
+          }
         >
           <p className="text-white text-xs">{day}</p>
           <CheckpointIcon className={`${isSpecial && "opacity-0"}`} height={30} width={30} />
           <h3 className={`${isSpecial && "opacity-0"} text-white text-xl font-semibold`}>{points}</h3>
-          <p className="text-white/45 text-xs">{loading ? <Loader className="animate-spin" height={15} width={15} /> : "Soon"}</p>
+          <p className="text-white/45 text-xs">{loading ? <Loader className="animate-spin" height={15} width={15} /> : isClaimableToday() ? "Claim" : "Soon"}</p>
         </div>
       )}
     </div>
