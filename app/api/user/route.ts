@@ -96,7 +96,7 @@ export async function POST(req: Request): Promise<NextResponse> {
           hasClaimedWelcomePoints: false,
           streak: 0,
           lastCheckIn: null,
-          lastClaimedDay: "Day 01",
+          lastClaimedDay: "",
           claimedCheckpoints: [],
         },
       });
