@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from "react";
 import CheckpointIcon from "./CheckpointIcon";
 import { Check, Loader } from "lucide-react";
@@ -14,11 +15,11 @@ interface CheckInBoxProps {
   checkpointId: string;
 }
 
-const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial,checkpointId, day, points, userId }) => {
+const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, checkpointId, day, points, userId }) => {
   const [loading, setLoading] = useState(false);
-  const {updateUser} = useUser()
+  const { updateUser } = useUser();
 
-  const handleCheckIn = async (userId: number, checkpointId: string, points: number) => {
+  const handleCheckIn = async (userId: number, checkpointId: string, points: number, day: string) => {
     if (isClaimed || loading) return;
 
     setLoading(true);
@@ -27,15 +28,15 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial,c
       const response = await fetch("/api/check-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, checkpointId, points }),
+        body: JSON.stringify({ userId, checkpointId, points, day }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         updateUser({
-            points,
-            claimedCheckpoints: [checkpointId],
+          points,
+          claimedCheckpoints: [checkpointId],
         });
         toast.success(`Check-in successful! New Points: ${data.points}, Streak: ${data.streak}`);
       } else {
@@ -46,9 +47,10 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial,c
     } finally {
       setLoading(false);
     }
-};
+  };
+
   return (
-    <div onClick={() => handleCheckIn(userId, checkpointId, points)} className="cursor-pointer">
+    <div onClick={() => handleCheckIn(userId, checkpointId, points, day)} className="cursor-pointer">
       {isClaimed ? (
         <div className="bg-gradient-to-tr border-[#016f15] border shadow-sm shadow-[#016f15] from-[#141414] via-[#016f15] to-[#141414] gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center">
           <p className="text-white/45 text-xs">{day}</p>

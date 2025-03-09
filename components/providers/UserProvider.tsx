@@ -5,6 +5,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useTelegram } from './TelegramData';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import Loader from '../Loader';
 interface UserContextType {
   user: any;
   loading: boolean;
@@ -33,6 +34,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     useEffect(() => {
       if (WebApp) {
+        WebApp.ready?.();
         const startParam = WebApp.initDataUnsafe?.start_param || '';
         setStartParam(startParam);
       }
@@ -40,15 +42,6 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
     useEffect(() => {
       const fetchUserData = async () => {
-        if (!userData) {
-          setError("No user data available");
-          toast.error("No user data available");
-          setLoading(false);
-          return;
-        }
-
-        WebApp.ready?.();
-
         try {
           const response = await fetch("/api/user", {
             method: "POST",
@@ -82,8 +75,8 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       fetchUserData();
     }, [router, WebApp, userData]);
 
-    if (loading) return <>Loading</>;
-    if (error) return <div className="flex justify-center p-4 mx-auto text-red-500">{error}</div>;
+    if (loading) return <Loader/>;
+    // if (!error) return <div className="flex justify-center p-4 mx-auto text-red-500">{error}</div>;
 
     return (
       <UserContext.Provider value={{ user, loading, error, startParam, updateUser }}>

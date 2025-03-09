@@ -1,16 +1,10 @@
 import React from 'react'
-import { jelly } from 'ldrs'
-
-jelly.register()
+import { Loader2 } from 'lucide-react'
 
 const Loader = () => {
   return (
     <div className="flex justify-center items-center h-[95dvh]">
-      <l-jelly
-        size="40"
-        speed="0.9"
-        color="white"
-      ></l-jelly>
+      <Loader2 className="h-10 w-10 animate-spin text-white" />
     </div>
   )
 }
