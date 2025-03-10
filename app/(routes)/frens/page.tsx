@@ -3,12 +3,14 @@ import Button from '@/components/Button'
 import CheckpointIcon from '@/components/CheckpointIcon'
 import CurrentChapter from '@/components/CurrentChapter'
 import { useTelegram } from '@/components/providers/TelegramData'
+import { useUser } from '@/components/providers/UserProvider'
 import React from 'react'
 import toast from 'react-hot-toast'
 import { BsPeopleFill } from 'react-icons/bs'
 
 const Frens = () => {
   const { userData } = useTelegram()
+  const {user} = useUser()
   const copyInviteLink = () => {
     toast.success('Invite link copied to clipboard')
     navigator.clipboard.writeText(`https://t.me/CheckpointCryptoBot/app?start=${userData?.userId}`)
@@ -42,7 +44,7 @@ const Frens = () => {
               </p>
             </div>
             <span>
-              15
+              {user?.referrals?.length || 0}
             </span>
           </div>
           <div className='p-4 w-full backdrop-blur-sm flex font-semibold items-center justify-between gap-2'>
@@ -53,7 +55,7 @@ const Frens = () => {
               </p>
             </div>
             <span>
-              1550
+              {user?.points || 0}
             </span>
           </div>
         </div>

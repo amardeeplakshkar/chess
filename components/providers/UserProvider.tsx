@@ -33,6 +33,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       gifts: [...(prevUser?.gifts || []), ...(updates.gifts || [])],
     }));}
 
+    
     useEffect(() => {
       if (WebApp) {
         WebApp.ready?.();
@@ -40,7 +41,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         setStartParam(startParam);
       }
     }, [WebApp]);
-
+    
     useEffect(() => {
       const fetchUserData = async () => {
         try {

@@ -17,9 +17,11 @@ interface User {
   gifts: string[];
   taskCompletions?: { taskId: string }[];
   lastClaimedDay: string;
+  referrals?: User[];
+  referredBy?: User | null;
 }
 
-// GET user with completed tasks
+// GET user with completed tasks and referral info
 export async function GET(req: Request): Promise<NextResponse> {
   try {
     const { searchParams } = new URL(req.url);
@@ -34,7 +36,11 @@ export async function GET(req: Request): Promise<NextResponse> {
 
     const user = await prisma.user.findUnique({
       where: { telegramId: parseInt(telegramId) },
-      include: { taskCompletions: true },
+      include: {
+        taskCompletions: true,
+        referrals: true,
+        referredBy: true,
+      },
     });
 
     if (!user) {
@@ -58,6 +64,8 @@ export async function GET(req: Request): Promise<NextResponse> {
       gifts: user.gifts,
       lastClaimedDay: user.lastClaimedDay,
       completedTaskIds,
+      referrals: user.referrals,
+      referredBy: user.referredBy,
     });
   } catch (error) {
     console.error("Error fetching user data:", error);
@@ -82,7 +90,11 @@ export async function POST(req: Request): Promise<NextResponse> {
 
     let user = await prisma.user.findUnique({
       where: { telegramId: userData.userId },
-      include: { taskCompletions: true },
+      include: {
+        taskCompletions: true,
+        referrals: true,
+        referredBy: true,
+      },
     });
 
     if (!user) {
@@ -101,6 +113,11 @@ export async function POST(req: Request): Promise<NextResponse> {
           lastClaimedDay: "",
           claimedCheckpoints: [],
           gifts: [],
+        },
+        include: {
+          taskCompletions: true,
+          referrals: true,
+          referredBy: true,
         },
       });
     }
@@ -122,6 +139,8 @@ export async function POST(req: Request): Promise<NextResponse> {
       claimedCheckpoints: user.claimedCheckpoints,
       gifts: user.gifts,
       completedTaskIds,
+      referrals: user.referrals,
+      referredBy: user.referredBy,
     });
   } catch (error) {
     console.error("Error processing user data:", error);
