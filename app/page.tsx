@@ -5,6 +5,7 @@ import CheckpointIcon from '@/components/CheckpointIcon'
 import CurrentChapter from '@/components/CurrentChapter'
 import { useTelegram } from '@/components/providers/TelegramData'
 import { useUser } from '@/components/providers/UserProvider'
+import { APP_URL, COMMUNITY_URL } from '@/constants'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import toast from 'react-hot-toast'
@@ -31,7 +32,7 @@ const HomePage = () => {
 
           if (response.ok) {
             updateUser({ points: data.pointsAdded });
-            toast.success(`Successfully referred! ${data.pointsAdded} CPs added`);
+            toast.success(`Referral Bonus! ${data.pointsAdded} CPs added`);
           } else {
             console.error('Referral error:', data.error);
           }
@@ -78,8 +79,8 @@ const HomePage = () => {
         </div>
       </div>
       <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
-        <Button onClick={() => router.replace("https://t.me/checkpoint_airdrop")} className='w-full bg-white text-black font-semibold'>
-          Join Community {startParam}
+        <Button onClick={() => router.replace(`${COMMUNITY_URL}`)} className='w-full bg-white text-black font-semibold'>
+          Join Community
         </Button>
         <div className='grid grid-cols-2 gap-2 w-full'>
           <Button onClick={() => router.push("/frens")} className='w-full font-semibold'>
@@ -87,7 +88,7 @@ const HomePage = () => {
           </Button>
           <Button onClick={() => handleShareStory("https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/checkpoint",
             "Check out this awesome story!",
-            { url: `https://t.me/checkpointcryptobot/app?start=${user?.telegramId}`, name: "Visit Now" })} className='w-full font-semibold bg-transparent border'>
+            { url: `${APP_URL}${user?.telegramId}`, name: "Visit Now" })} className='w-full font-semibold bg-transparent border'>
             Share Story
           </Button>
         </div>

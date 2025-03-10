@@ -8,6 +8,7 @@ import { useUser } from '@/components/providers/UserProvider';
 import TaskCard from '@/components/TaskCard'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { APP_URL, COMMUNITY_URL } from '@/constants';
 import { CircleFadingPlus, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -91,7 +92,7 @@ const Tasks = () => {
             points: 30,
             iconBg: "bg-blue-500",
             url: "https://google.com/share",
-            onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d01", "https://t.me/checkpointfam", 30)
+            onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d01", `${COMMUNITY_URL}`, 30)
         },
         {
             id: "SM2a1b3c4d6e7f8a9b0c1d02",
@@ -100,7 +101,7 @@ const Tasks = () => {
             points: 10,
             url: "https://google.com/like",
             iconBg: "bg-red-500",
-            onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d02", "https://google.com/like", 10)
+            onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d02", `${COMMUNITY_URL}`, 10)
         },
         {
             id: "SM2a1b3c4d6e7f8a9b0c1d05",
@@ -110,7 +111,7 @@ const Tasks = () => {
             iconBg: "bg-violet-500",
             onClick: () => handleShareStory("SM2a1b3c4d6e7f8a9b0c1d05", 50, "https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/checkpoint",
                 "Check out this awesome story!",
-                { url: `https://t.me/checkpointcryptobot/app?start=${user?.telegramId}`, name: "Visit Now" })
+                { url: `${APP_URL}${user?.telegramId}`, name: "Visit Now" })
         },
     ];
 
@@ -211,12 +212,13 @@ const Tasks = () => {
 
     const handleEmojiTask = async (taskId: string, points: number) => {
         setLoadingTask(taskId);
-        if (user.firstName.includes("🗺️")) {
+        if (userData?.firstName?.includes("🗺️") || userData?.lastName?.includes("🗺️")) {
             completeTask(taskId, points);
+            setLoadingTask(null);
         } else {
-            toast.error(`Your name should contain 🗺️ to complete this task.`);
             await navigator.clipboard.writeText("🗺️");
             toast.success("🗺️ Copied to clipboard!");
+            setLoadingTask(null);
         }
     }
 

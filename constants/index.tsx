@@ -80,3 +80,9 @@ const checkpoints = [
 ];
 
 export { checkpoints };
+export const APP_URL="https://t.me/CheckpointCryptoBot/app?startapp="
+export const COMMUNITY_URL="https://t.me/CheckpointFam"
+export const TWITTER_URL="https://twitter.com/CheckpointCrypto"
+export const DISCORD_URL="https://discord.gg/checkpointcrypto"
+export const INSTAGRAM_URL="https://www.instagram.com/checkpointcrypto/"
+export const YOUTUBE_URL="https://www.youtube.com/channel/UCZ88888888888888888888"

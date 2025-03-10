@@ -4,6 +4,7 @@ import CheckpointIcon from '@/components/CheckpointIcon'
 import CurrentChapter from '@/components/CurrentChapter'
 import { useTelegram } from '@/components/providers/TelegramData'
 import { useUser } from '@/components/providers/UserProvider'
+import { APP_URL } from '@/constants'
 import React from 'react'
 import toast from 'react-hot-toast'
 import { BsPeopleFill } from 'react-icons/bs'
@@ -13,11 +14,11 @@ const Frens = () => {
   const {user} = useUser()
   const copyInviteLink = () => {
     toast.success('Invite link copied to clipboard')
-    navigator.clipboard.writeText(`https://t.me/CheckpointCryptoBot/app?start=${userData?.userId}`)
+    navigator.clipboard.writeText(`${APP_URL}${userData?.userId}`)
   }
   const shareInviteLink = () => {
     toast.success('Invite link shared')
-    window.open(`https://t.me/share/url?url=https://t.me/CheckpointCryptoBot/app?start=${userData?.userId}`, '_blank')
+    window.open(`https://t.me/share/url?url=${APP_URL}${userData?.userId}`, '_blank')
   }
   return (
     <div className='h-full w-full flex flex-col p-4'>
@@ -55,7 +56,7 @@ const Frens = () => {
               </p>
             </div>
             <span>
-              {user?.points || 0}
+              {user?.referrals?.length*50 || 0}
             </span>
           </div>
         </div>
