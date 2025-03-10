@@ -11,7 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { APP_URL, COMMUNITY_URL } from '@/constants';
 import { CircleFadingPlus, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { BsCoin, BsGift, BsTelegram, BsPersonCheck } from "react-icons/bs";
@@ -30,8 +29,7 @@ type Task = {
 
 const Tasks = () => {
     const { userData, WebApp } = useTelegram()
-    const [loadingTask, setLoadingTask] = useState<string | null>(null);
-    const router = useRouter()
+    const [loadingTask, setLoadingTask] = useState<string | null>(null)
     const { user, updateUser } = useUser()
     const limitedTasks = [
         {
