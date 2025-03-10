@@ -62,9 +62,9 @@ export const socialMediaTasks = [
 
 
 const checkpoints = [
-    { id: "CP2a1b3c4d6e7f8a9b0c1d01", day: "Day 01", number: 10 },
+    { id: "CP2a1b3c4d6e7f8a9b0c1d01", day: "Day 01", number: 10, isSpecial: true, bgImage: "https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/DropNFT" },
     { id: "CP2a1b3c4d6e7f8a9b0c1d02", day: "Day 02", number: 20 },
-    { id: "CP2a1b3c4d6e7f8a9b0c1d03", day: "Day 03", number: 30, isSpecial: true, bgImage: "https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/DropNFT" },
+    { id: "CP2a1b3c4d6e7f8a9b0c1d03", day: "Day 03", number: 30 },
     { id: "CP2a1b3c4d6e7f8a9b0c1d04", day: "Day 04", number: 40 },
     { id: "CP2a1b3c4d6e7f8a9b0c1d05", day: "Day 05", number: 50 },
     { id: "CP2a1b3c4d6e7f8a9b0c1d06", day: "Day 06", number: 60 },
