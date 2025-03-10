@@ -78,10 +78,17 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, 
         </div>
       ) : (
         <div
-          className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""} ${isClaimableToday() ? "bg-white border-2 border-dashed border-black text-black" : ""} ${isSpecial && "bg-transparent"}`}
+          className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""}`}
           style={
             isClaimableToday() 
-              ? {} 
+              ? {
+                backgroundColor: "white",
+                borderWidth: "2px",
+                borderStyle: "dashed",
+                borderColor: "black",
+                color: "black",
+                backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center"
+              } 
               : isSpecial && bgImage 
                 ? { backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center" } 
                 : { backgroundColor: "#141414" }
