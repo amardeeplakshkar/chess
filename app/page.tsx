@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import Button from '@/components/Button'
 import CheckpointIcon from '@/components/CheckpointIcon'
 import CurrentChapter from '@/components/CurrentChapter'
+import { useTelegram } from '@/components/providers/TelegramData'
 import { useUser } from '@/components/providers/UserProvider'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -9,6 +11,27 @@ import React from 'react'
 const HomePage = () => {
   const { user } = useUser()
   const router = useRouter()
+  const {WebApp} = useTelegram()
+  const handleShareStory = (mediaUrl: string, text = "", widgetLink?: { url: string; name?: string }) => {
+    if (WebApp) {
+        const params: Record<string, any> = {};
+
+        if (text) {
+            params.text = text;
+        }
+
+        if (widgetLink && widgetLink.url) {
+            params.widget_link = {
+                url: widgetLink.url,
+                ...(widgetLink.name && { name: widgetLink.name }),
+            };
+        }
+
+        WebApp.shareToStory(mediaUrl, params);
+    } else {
+        console.error("Telegram WebApp SDK not available.");
+    }
+}
   return (
     <div className='h-full w-full flex flex-col items-center p-4'>
       <div className='flex-1 flex flex-col w-full'>
@@ -30,7 +53,9 @@ const HomePage = () => {
           <Button onClick={() => router.push("/frens")} className='w-full font-semibold'>
             Invite Friends
           </Button>
-          <Button onClick={() => alert("hello")} className='w-full font-semibold bg-transparent border'>
+          <Button onClick={() => handleShareStory("https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/checkpoint",
+                "Check out this awesome story!",
+                { url: `https://t.me/checkpointcryptobot/app?start=${user?.telegramId}`, name: "Visit Now" })} className='w-full font-semibold bg-transparent border'>
             Share Story
           </Button>
         </div>

@@ -19,7 +19,7 @@ interface TaskCardProps {
 const TaskCard: React.FC<TaskCardProps> = ({ bgColor, taskIcon, disabled, isLoading, iconBg, isCompleted, title, points, onClick }) => {
     return (
         <div className={`${!bgColor ? "bg-[#141414]" : bgColor} rounded-xl w-full gap-2 my-1 p-2 px-4 flex items-center`}>
-            <div className={`p-2 ${iconBg} rounded-full text-2xl`}>
+            <div className={`p-2 ${iconBg} flex justify-center items-center rounded-full text-2xl`}>
                 {taskIcon}
             </div>
             <div className='w-full flex items-center gap-2 justify-between'>

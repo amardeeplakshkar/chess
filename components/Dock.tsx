@@ -21,7 +21,7 @@ const DockItems = [
     {
         icon: BsPeopleFill,
         icon2: BsPeople,
-        link: '/test',
+        link: '/frens',
     },
 ]
 

@@ -1,19 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
+import CheckpointIcon from '@/components/CheckpointIcon';
 import CurrentChapter from '@/components/CurrentChapter';
 import { useTelegram } from '@/components/providers/TelegramData';
 import { useUser } from '@/components/providers/UserProvider';
 import TaskCard from '@/components/TaskCard'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CircleFadingPlus } from 'lucide-react';
+import { CircleFadingPlus, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { BsCoin, BsGift, BsTelegram, BsPersonCheck } from "react-icons/bs";
-import { BsShare, BsHeartFill } from "react-icons/bs";
+import { BsHeartFill } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
 
 type Task = {
@@ -36,6 +37,7 @@ const Tasks = () => {
             id: "IN2a1b3c4d6e7f8a9b0c1d01",
             title: "Invite 5 Friends",
             taskIcon: <BsPeopleFill />,
+            iconBg: "bg-sky-500",
             points: 50,
             referCount: 5,
             onClick: () => handleInviteTask("IN2a1b3c4d6e7f8a9b0c1d01", 5, 50)
@@ -47,6 +49,7 @@ const Tasks = () => {
             taskIcon: <BsPeopleFill />,
             points: 100,
             referCount: 10,
+            iconBg: "bg-pink-500",
             onClick: () => handleInviteTask("IN2a1b3c4d6e7f8a9b0c1d02", 10, 100)
         },
 
@@ -56,6 +59,7 @@ const Tasks = () => {
             taskIcon: <BsPeopleFill />,
             points: 200,
             referCount: 20,
+            iconBg: "bg-green-500",
             onClick: () => handleInviteTask("IN2a1b3c4d6e7f8a9b0c1d03", 20, 200)
         },
 
@@ -65,6 +69,7 @@ const Tasks = () => {
             taskIcon: <BsPeopleFill />,
             points: 500,
             referCount: 50,
+            iconBg: "bg-yellow-500",
             onClick: () => handleInviteTask("IN2a1b3c4d6e7f8a9b0c1d04", 50, 500)
         },
     ];
@@ -72,20 +77,29 @@ const Tasks = () => {
 
     const socialMediaTasks = [
         {
-            id: "SM2a1b3c4d6e7f8a9b0c1d01",
-            title: "Share on Social Media",
-            taskIcon: <BsShare />,
-            points: 30,
-            url: "https://google.com/share",
-            onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d01", "https://google.com/share", 30)
+            id: "SM2a1b3c4d6e7f8a9b0c1d06",
+            title: "Add 🗺️ to your Name",
+            taskIcon: <CheckpointIcon height={24} width={24} />,
+            points: 50,
+            iconBg: "bg-teal-700",
+            onClick: () => handleEmojiTask("SM2a1b3c4d6e7f8a9b0c1d06", 50)
         },
-
+        {
+            id: "SM2a1b3c4d6e7f8a9b0c1d01",
+            title: "Join Community",
+            taskIcon: <MessageCircle />,
+            points: 30,
+            iconBg: "bg-blue-500",
+            url: "https://google.com/share",
+            onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d01", "https://t.me/checkpointfam", 30)
+        },
         {
             id: "SM2a1b3c4d6e7f8a9b0c1d02",
             title: "Like a Post",
             taskIcon: <BsHeartFill />,
             points: 10,
             url: "https://google.com/like",
+            iconBg: "bg-red-500",
             onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d02", "https://google.com/like", 10)
         },
         {
@@ -93,9 +107,10 @@ const Tasks = () => {
             title: "Share Story",
             taskIcon: <CircleFadingPlus />,
             points: 50,
-            onClick: () => handleShareStory("SM2a1b3c4d6e7f8a9b0c1d05", 40, "https://core.telegram.org/file/464001388/10b1a/IYpn0wWfggw.1156850/fd9a32baa81dcecbe4",
+            iconBg: "bg-violet-500",
+            onClick: () => handleShareStory("SM2a1b3c4d6e7f8a9b0c1d05", 50, "https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/checkpoint",
                 "Check out this awesome story!",
-                { url: "https://t.me/checkpointcryptobot/start", name: "Visit Now" })
+                { url: `https://t.me/checkpointcryptobot/app?start=${user?.telegramId}`, name: "Visit Now" })
         },
     ];
 
@@ -133,6 +148,7 @@ const Tasks = () => {
                     title: "Claim Partner B Airdrop",
                     taskIcon: <BsGift />,
                     points: 100,
+                    iconBg: "bg-[#FFD700]",
                     url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
                     onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d03", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 100)
                 },
@@ -193,6 +209,17 @@ const Tasks = () => {
         }
     }
 
+    const handleEmojiTask = async (taskId: string, points: number) => {
+        setLoadingTask(taskId);
+        if (user.firstName.includes("🗺️")) {
+            completeTask(taskId, points);
+        } else {
+            toast.error(`Your name should contain 🗺️ to complete this task.`);
+            await navigator.clipboard.writeText("🗺️");
+            toast.success("🗺️ Copied to clipboard!");
+        }
+    }
+
     const completeTask = async (taskId: string, points: number) => {
         if (!userData) {
             toast.error("Please login to complete the task.");
@@ -238,28 +265,28 @@ const Tasks = () => {
                 </p>
             </div>
             <Tabs defaultValue='limited'>
-                <TabsList className='bg-[#141414] grid rounded-full w-full grid-cols-3'>
+                <TabsList className='bg-[#141414] grid rounded-full w-full grid-cols-2'>
                     <TabsTrigger className='rounded-full' value='limited'>
                         Limited
                     </TabsTrigger>
                     <TabsTrigger className='rounded-full' value='social'>
                         Community
                     </TabsTrigger>
-                    <TabsTrigger className='rounded-full' value='partner'>
+                    <TabsTrigger className='hidden rounded-full' value='partner'>
                         Partners
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent className='' value='limited'>
                     <ScrollArea className='h-[50dvh] *:my-1'>
                         {limitedTasks.map((task) => (
-                            <TaskCard onClick={task.onClick} isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} isCompleted={user?.completedTaskIds.includes(task.id)} taskIcon={task.taskIcon} points={task.points} />
+                            <TaskCard onClick={task.onClick} isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg={task.iconBg || "bg-white/10"} title={task.title} isCompleted={user?.completedTaskIds.includes(task.id)} taskIcon={task.taskIcon} points={task.points} />
                         ))}
                     </ScrollArea>
                 </TabsContent>
                 <TabsContent className='' value='social'>
                     <ScrollArea className='h-[55dvh] *:my-1 '>
                         {socialMediaTasks.map((task) => (
-                            <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} isCompleted={user?.completedTaskIds.includes(task.id)} onClick={task.onClick} points={task.points} />
+                            <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} iconBg={task.iconBg || "bg-white/10"} title={task.title} taskIcon={task.taskIcon} isCompleted={user?.completedTaskIds.includes(task.id)} onClick={task.onClick} points={task.points} />
                         ))}
                     </ScrollArea>
                 </TabsContent>
@@ -282,7 +309,7 @@ const Tasks = () => {
                                         </p>
                                     </div>
                                     {partner.tasks.map((task: Task) => (
-                                        <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} bgColor='bg-black/85' iconBg="bg-white/10" title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} isCompleted={user?.completedTaskIds.includes(task.id)} points={task.points} />
+                                        <TaskCard isLoading={loadingTask === task.id} key={task.id} disabled={loadingTask !== null} bgColor='bg-black/85' title={task.title} taskIcon={task.taskIcon} onClick={task.onClick} isCompleted={user?.completedTaskIds.includes(task.id)} points={task.points} />
                                     ))}
                                 </div>
                             ))

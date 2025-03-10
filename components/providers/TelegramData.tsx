@@ -2,6 +2,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import Loader from "../Loader";
 
 interface UserData {
   userId: number;
@@ -58,11 +59,13 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
       } finally {
         setLoading(false);
       }
-    };
-
+    }
     initTelegramApp();
   }, []);
-
+  
+  if(loading) {
+    return <Loader/>;
+  }
   return (
     <TelegramContext.Provider value={{ userData, loading, error, WebApp }}>
       {children}
