@@ -34,7 +34,7 @@ export async function POST(req: Request) {
                 data: {
                     points: { increment: points },
                     claimedCheckpoints: { push: checkpointId },
-                    gifts: { push: bgImage },
+                    gifts: { push: bgImage ? bgImage : [] },
                     streak: 1,
                     lastCheckIn: today,
                     lastClaimedDay: day
@@ -103,7 +103,7 @@ export async function POST(req: Request) {
             data: {
                 points: { increment: points },
                 claimedCheckpoints: { push: checkpointId },
-                gifts: { push: bgImage },
+                gifts: { push: bgImage ? bgImage : [] },
                 streak: { increment: 1 },
                 lastCheckIn: today,
                 lastClaimedDay: day
