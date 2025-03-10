@@ -18,6 +18,7 @@ interface TelegramContextType {
   loading: boolean;
   error: string | null;
   WebApp: any | null;
+  startParam: string | null;
 }
 
 const TelegramContext = createContext<TelegramContextType | undefined>(undefined);
@@ -27,6 +28,7 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [WebApp, setWebApp] = useState<any | null>(null);
+  const [startParam, setStartParam] = useState<string | null>(null);
 
   useEffect(() => {
     const initTelegramApp = async () => {
@@ -34,7 +36,8 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
         if (typeof window !== "undefined") {
           const importedWebApp = (await import("@twa-dev/sdk")).default;
           importedWebApp.ready();
-
+          const startParam = importedWebApp.initDataUnsafe?.start_param || null;
+          setStartParam(startParam);
           setWebApp(importedWebApp);
 
           const user = importedWebApp.initDataUnsafe?.user;
@@ -67,7 +70,7 @@ export const TelegramProvider: React.FC<{ children: ReactNode }> = ({ children }
     return <Loader/>;
   }
   return (
-    <TelegramContext.Provider value={{ userData, loading, error, WebApp }}>
+    <TelegramContext.Provider value={{ userData, loading, error, WebApp, startParam }}>
       {children}
     </TelegramContext.Provider>
   );

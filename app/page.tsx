@@ -10,9 +10,9 @@ import React, { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
 const HomePage = () => {
-  const { user, updateUser, startParam } = useUser()
+  const { user, updateUser } = useUser()
   const router = useRouter()
-  const { WebApp, userData } = useTelegram()
+  const { WebApp, userData, startParam } = useTelegram()
 
   useEffect(() => {
     const processReferral = async () => {
