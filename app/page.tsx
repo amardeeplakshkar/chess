@@ -79,7 +79,7 @@ const HomePage = () => {
       </div>
       <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
         <Button onClick={() => router.replace("https://t.me/checkpoint_airdrop")} className='w-full bg-white text-black font-semibold'>
-          Join Community
+          Join Community {startParam}
         </Button>
         <div className='grid grid-cols-2 gap-2 w-full'>
           <Button onClick={() => router.push("/frens")} className='w-full font-semibold'>
