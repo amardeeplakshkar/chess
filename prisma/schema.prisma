@@ -34,6 +34,7 @@ model User {
   lastCheckIn      DateTime? 
   lastClaimedDay   String   @default("Day 01")
   claimedCheckpoints String[] @default([])
+  gifts String[] @default([])
 }
 
 model Task {

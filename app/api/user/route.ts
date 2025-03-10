@@ -14,6 +14,7 @@ interface User {
   streak: number;
   lastCheckIn?: Date;
   claimedCheckpoints: string[];
+  gifts: string[];
   taskCompletions?: { taskId: string }[];
   lastClaimedDay: string;
 }
@@ -54,6 +55,7 @@ export async function GET(req: Request): Promise<NextResponse> {
       streak: user.streak,
       lastCheckIn: user.lastCheckIn,
       claimedCheckpoints: user.claimedCheckpoints,
+      gifts: user.gifts,
       lastClaimedDay: user.lastClaimedDay,
       completedTaskIds,
     });
@@ -98,6 +100,7 @@ export async function POST(req: Request): Promise<NextResponse> {
           lastCheckIn: null,
           lastClaimedDay: "",
           claimedCheckpoints: [],
+          gifts: [],
         },
       });
     }
@@ -117,6 +120,7 @@ export async function POST(req: Request): Promise<NextResponse> {
       lastCheckIn: user.lastCheckIn,
       lastClaimedDay: user.lastClaimedDay,
       claimedCheckpoints: user.claimedCheckpoints,
+      gifts: user.gifts,
       completedTaskIds,
     });
   } catch (error) {
