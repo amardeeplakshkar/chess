@@ -39,7 +39,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, 
       const response = await fetch("/api/check-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, checkpointId, points, day }),
+        body: JSON.stringify({ userId, checkpointId, points, day, bgImage }),
       });
 
       const data = await response.json();
@@ -78,7 +78,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, 
         </div>
       ) : (
         <div
-          className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""} ${isClaimableToday() ? "bg-white border-2 border-dashed border-black text-black" : ""}`}
+          className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""} ${isClaimableToday() ? "bg-white border-2 border-dashed border-black text-black" : ""} ${isSpecial && "bg-transparent"}`}
           style={
             isClaimableToday() 
               ? {} 
