@@ -23,11 +23,6 @@ const DockItems = [
         icon2: BsPeople,
         link: '/frens',
     },
-    {
-        icon: BsPeopleFill,
-        icon2: BsPeople,
-        link: '/test',
-    },
 ]
 
 const Dock = () => {
