@@ -175,8 +175,7 @@ const Tasks = () => {
 
     const handleInviteTask = (taskId: string, referCount: number, points: number) => {
         setLoadingTask(taskId);
-        if (referCount === 1) {
-            router.push("/frens");
+        if (referCount <= user?.referrals?.length) {
             setTimeout(() => {
                 completeTask(taskId, points);
             }, 10000)
@@ -189,7 +188,7 @@ const Tasks = () => {
     const handleShareStory = (taskId: string, points: number, mediaUrl: string, text = "", widgetLink?: { url: string; name?: string }) => {
         if (WebApp) {
             const params: Record<string, any> = {};
-
+           setLoadingTask(taskId);
             if (text) {
                 params.text = text;
             }
@@ -205,7 +204,9 @@ const Tasks = () => {
             setTimeout(() => {
                 completeTask(taskId, points);
             }, 10000)
+            setLoadingTask(null);
         } else {
+            setLoadingTask(null);
             console.error("Telegram WebApp SDK not available.");
         }
     }
