@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import CurrentChapter from '@/components/CurrentChapter';
@@ -6,12 +7,13 @@ import { useUser } from '@/components/providers/UserProvider';
 import TaskCard from '@/components/TaskCard'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { CircleFadingPlus } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { BsCoin, BsGift, BsTelegram, BsPersonCheck } from "react-icons/bs";
-import { BsShare, BsHeartFill, BsChatDotsFill, BsGlobe } from "react-icons/bs";
+import { BsShare, BsHeartFill } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
 
 type Task = {
@@ -25,10 +27,10 @@ type Task = {
 
 
 const Tasks = () => {
-    const { userData } = useTelegram()
+    const { userData, WebApp } = useTelegram()
     const [loadingTask, setLoadingTask] = useState<string | null>(null);
     const router = useRouter()
-    const {user,updateUser} = useUser()
+    const { user, updateUser } = useUser()
     const limitedTasks = [
         {
             id: "IN2a1b3c4d6e7f8a9b0c1d01",
@@ -86,23 +88,14 @@ const Tasks = () => {
             url: "https://google.com/like",
             onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d02", "https://google.com/like", 10)
         },
-
         {
-            id: "SM2a1b3c4d6e7f8a9b0c1d03",
-            title: "Comment on a Post",
-            taskIcon: <BsChatDotsFill />,
-            points: 20,
-            url: "https://google.com/comment",
-            onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d03", "https://google.com/comment", 20)
-        },
-
-        {
-            id: "SM2a1b3c4d6e7f8a9b0c1d04",
-            title: "Visit Website",
-            taskIcon: <BsGlobe />,
-            points: 40,
-            url: "https://google.com/visit",
-            onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d04", "https://google.com/visit", 40)
+            id: "SM2a1b3c4d6e7f8a9b0c1d05",
+            title: "Share Story",
+            taskIcon: <CircleFadingPlus />,
+            points: 50,
+            onClick: () => handleShareStory("SM2a1b3c4d6e7f8a9b0c1d05", 40, "https://core.telegram.org/file/464001388/10b1a/IYpn0wWfggw.1156850/fd9a32baa81dcecbe4",
+                "Check out this awesome story!",
+                { url: "https://t.me/checkpointcryptobot/start", name: "Visit Now" })
         },
     ];
 
@@ -176,6 +169,30 @@ const Tasks = () => {
         }
     };
 
+    const handleShareStory = (taskId: string, points: number, mediaUrl: string, text = "", widgetLink?: { url: string; name?: string }) => {
+        if (WebApp) {
+            const params: Record<string, any> = {};
+
+            if (text) {
+                params.text = text;
+            }
+
+            if (widgetLink && widgetLink.url) {
+                params.widget_link = {
+                    url: widgetLink.url,
+                    ...(widgetLink.name && { name: widgetLink.name }),
+                };
+            }
+
+            WebApp.shareToStory(mediaUrl, params);
+            setTimeout(() => {
+                completeTask(taskId, points);
+            }, 10000)
+        } else {
+            console.error("Telegram WebApp SDK not available.");
+        }
+    }
+
     const completeTask = async (taskId: string, points: number) => {
         if (!userData) {
             toast.error("Please login to complete the task.");
@@ -192,11 +209,11 @@ const Tasks = () => {
 
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || "Task failed.");
-            
+
             updateUser({
                 points,
                 completedTaskIds: [taskId],
-              });
+            });
 
             toast.success("Task completed successfully!");
             setLoadingTask(null);
@@ -270,7 +287,7 @@ const Tasks = () => {
                                 </div>
                             ))
                             : <div className='flex flex-col items-center justify-center h-[50dvh]'>
-                                <Image src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgAD9wADVp29Cg.webp" unoptimized width={150} height={150} alt=""/>
+                                <Image src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgAD9wADVp29Cg.webp" unoptimized width={150} height={150} alt="" />
                                 Daily Goals? Crushed. 💪
                             </div>
                         }
