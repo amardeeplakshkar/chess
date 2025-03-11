@@ -59,9 +59,9 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
           setUser(data || {});
 
-          // if (!data.hasClaimedWelcomePoints) {
-          //   router.push("/welcome");
-          // }
+          if (!data.hasClaimedWelcomePoints) {
+            router.push("/welcome");
+          }
         } catch (err: any) {
           const errorMsg = "Failed to fetch user data: " + err.message;
           setError(errorMsg);

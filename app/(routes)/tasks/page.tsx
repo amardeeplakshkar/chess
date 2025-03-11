@@ -184,9 +184,9 @@ const Tasks = () => {
     };
 
     const handleShareStory = (taskId: string, points: number, mediaUrl: string, text = "", widgetLink?: { url: string; name?: string }) => {
-        if (WebApp) {
+        setLoadingTask(taskId);
+        if (WebApp) { 
             const params: Record<string, any> = {};
-           setLoadingTask(taskId);
             if (text) {
                 params.text = text;
             }
