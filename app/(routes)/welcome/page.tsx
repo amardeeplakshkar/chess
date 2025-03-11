@@ -9,10 +9,12 @@ import Aos from 'aos';
 import 'aos/dist/aos.css';
 import CheckpointIcon from '@/components/CheckpointIcon';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@/components/providers/UserProvider';
 
 const WelcomePage = () => {
     const { userData } = useTelegram()
     const [randomValue, setRandomValue] = React.useState(0);
+    const {updateUser} = useUser()
     const router = useRouter()
     useEffect(() => {
         const value = Math.floor(Math.random() * (1200 - 500 + 1)) + 500;
@@ -38,6 +40,9 @@ const WelcomePage = () => {
             if (response.ok) {
                 toast.success(`🎉 Points claimed!`);
                 router.push("/")
+                updateUser({
+                    points: randomValue + 527,
+                });
             } else {
                 toast.error(data.error || 'Something went wrong.');
                 router.push("/")
