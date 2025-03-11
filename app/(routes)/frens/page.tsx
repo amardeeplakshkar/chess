@@ -30,8 +30,8 @@ const Frens = () => {
         <div className='text-muted-foreground text-sm'>
           <ul>
             <li>Invite more frens to earn more CPs</li>
-            <li>5 CPs per invite</li>
-            <li>15 CPs per invite for frens with telegram premium</li>
+            <li>50 CPs per invite</li>
+            <li>150 CPs per invite for frens with telegram premium</li>
           </ul>
         </div>
       </div>
