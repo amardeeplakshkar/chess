@@ -8,10 +8,12 @@ import toast from 'react-hot-toast';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
 import CheckpointIcon from '@/components/CheckpointIcon';
+import { useRouter } from 'next/navigation';
 
 const WelcomePage = () => {
     const { userData } = useTelegram()
     const [randomValue, setRandomValue] = React.useState(0);
+    const router = useRouter()
     useEffect(() => {
         const value = Math.floor(Math.random() * (1200 - 500 + 1)) + 500;
         setRandomValue(value);
@@ -35,12 +37,15 @@ const WelcomePage = () => {
             const data = await response.json();
             if (response.ok) {
                 toast.success(`🎉 Points claimed!`);
+                router.push("/")
             } else {
                 toast.error(data.error || 'Something went wrong.');
+                router.push("/")
             }
         } catch (err) {
             console.error('Error claiming points:', err);
             toast.error('Failed to claim points.');
+            router.push("/")
         }
     }
     return (
