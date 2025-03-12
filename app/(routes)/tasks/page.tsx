@@ -13,7 +13,7 @@ import { CircleFadingPlus, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
-import { BsCoin, BsGift, BsTelegram, BsPersonCheck } from "react-icons/bs";
+import { BsTelegram, BsPersonCheck } from "react-icons/bs";
 import { BsHeartFill } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
 
@@ -115,52 +115,52 @@ const Tasks = () => {
 
     const partnerAirdropTasks = [
         {
-            name: "Partner Airdrop",
-            logo: "https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/DropNFT",
-            partnerBg: "https://blog.obiex.finance/content/images/size/w720/2024/02/blog-cover45.jpg",
+            name: "CAPS",
+            logo: "https://lh7-rt.googleusercontent.com/docsz/AD_4nXddJ88joyuEsh9xbly9ELg6PKHGMW0m5XicnY3CN6Hm3yuzNQKLAHPOXnahPmt0Doh0JrsRZsVZ09XrIaIMznVoAxgVX90zRXKm7lrSTTPm9vSxn8dmwhkCWhcFJ-TxFvLXe7eoow?key=oDc7xJx6NO6bFvZceoMhlCBH",
+            partnerBg: "https://capsbot.com/caps_group.png",
             tasks: [
                 {
-                    id: "PA2a1b3c4d6e7f8a9b0c1d01",
-                    title: "Join Partner Telegram",
+                    id: "PA2a1b3c4d6e7f8a9b0c1d05",
+                    title: "Join CAPS",
                     taskIcon: <BsTelegram />,
                     points: 50,
-                    url: "https://t.me/pawsupfam",
-                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d01", "https://t.me/pawsupfam", 50)
+                    url: "https://t.me/DurovCapsBot/caps?startapp=6102684114",
+                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d05", "https://t.me/DurovCapsBot/caps?startapp=6102684114", 50)
                 },
                 {
-                    id: "PA2a1b3c4d6e7f8a9b0c1d02",
-                    title: "Follow Partner on Twitter",
+                    id: "PA2a1b3c4d6e7f8a9b0c1d06",
+                    title: "Join CAPS Community",
                     taskIcon: <BsPersonCheck />,
                     points: 30,
-                    url: "https://twitter.com/partner",
-                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d02", "https://twitter.com/partner", 30)
+                    url: "https://t.me/caps",
+                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d06", "https://t.me/caps", 30)
                 }
             ]
         },
-        {
-            name: "Partner B Airdrop",
-            logo: "https://images.squarespace-cdn.com/content/v1/5313d422e4b0aeaef76ef185/6da8296e-c16e-478c-8b4f-598f8e05db98/IAGE+Logo.jpg",
-            partnerBg: "https://miro.medium.com/v2/resize:fit:720/format:webp/0*BpBk3olJUw5TiqCF.png",
-            tasks: [
-                {
-                    id: "PB2a1b3c4d6e7f8a9b0c1d03",
-                    title: "Claim Partner B Airdrop",
-                    taskIcon: <BsGift />,
-                    points: 100,
-                    iconBg: "bg-[#FFD700]",
-                    url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
-                    onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d03", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 100)
-                },
-                {
-                    id: "PB2a1b3c4d6e7f8a9b0c1d04",
-                    title: "Stake Partner B Tokens",
-                    taskIcon: <BsCoin />,
-                    points: 200,
-                    url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
-                    onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d04", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 200)
-                }
-            ]
-        }
+        // {
+        //     name: "Partner B Airdrop",
+        //     logo: "https://images.squarespace-cdn.com/content/v1/5313d422e4b0aeaef76ef185/6da8296e-c16e-478c-8b4f-598f8e05db98/IAGE+Logo.jpg",
+        //     partnerBg: "https://miro.medium.com/v2/resize:fit:720/format:webp/0*BpBk3olJUw5TiqCF.png",
+        //     tasks: [
+        //         {
+        //             id: "PB2a1b3c4d6e7f8a9b0c1d03",
+        //             title: "Claim Partner B Airdrop",
+        //             taskIcon: <BsGift />,
+        //             points: 100,
+        //             iconBg: "bg-[#FFD700]",
+        //             url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
+        //             onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d03", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 100)
+        //         },
+        //         {
+        //             id: "PB2a1b3c4d6e7f8a9b0c1d04",
+        //             title: "Stake Partner B Tokens",
+        //             taskIcon: <BsCoin />,
+        //             points: 200,
+        //             url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
+        //             onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d04", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 200)
+        //         }
+        //     ]
+        // }
     ];
 
     const handleFollowChannel = (taskId: string, url: string, points: number) => {
@@ -266,14 +266,14 @@ const Tasks = () => {
                 </p>
             </div>
             <Tabs defaultValue='limited'>
-                <TabsList className='bg-[#141414] grid rounded-full w-full grid-cols-2'>
+                <TabsList className='bg-[#141414] grid rounded-full w-full grid-cols-3'>
                     <TabsTrigger className='rounded-full' value='limited'>
                         Limited
                     </TabsTrigger>
                     <TabsTrigger className='rounded-full' value='social'>
                         Community
                     </TabsTrigger>
-                    <TabsTrigger className='hidden rounded-full' value='partner'>
+                    <TabsTrigger className='rounded-full' value='partner'>
                         Partners
                     </TabsTrigger>
                 </TabsList>
@@ -297,7 +297,7 @@ const Tasks = () => {
                             partnerAirdropTasks.map((partner, index) => (
                                 <div key={index} style={{
                                     backgroundImage: `url(${partner.partnerBg})`,
-                                }} className="my-2 *:m-1 p-2 rounded-lg bg-cover bg-center">
+                                }} className="my-2 bg-purple-500/25 *:m-1 p-2 rounded-lg bg-cover bg-center">
                                     <div className='flex pb-2 items-center gap-2'>
                                         <div className='w-10 border border-white h-10 rounded-full bg-cover bg-center' style={{
                                             backgroundImage: `url(${partner.logo})`,
