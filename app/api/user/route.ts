@@ -19,6 +19,11 @@ interface User {
   lastClaimedDay: string;
   referrals?: User[];
   referredBy?: User | null;
+  isNewUser: boolean;
+  walletAddress?: string;
+  isWalletConnected: boolean;
+  dailyPlays: number;
+  lastPlayedDate?: Date;
 }
 
 // GET user with completed tasks and referral info
@@ -66,6 +71,11 @@ export async function GET(req: Request): Promise<NextResponse> {
       completedTaskIds,
       referrals: user.referrals,
       referredBy: user.referredBy,
+      isNewUser: user.isNewUser,
+      walletAddress: user.walletAddress,
+      isWalletConnected: user.isWalletConnected,
+      dailyPlays: user.dailyPlays,
+      lastPlayedDate: user.lastPlayedDate
     });
   } catch (error) {
     console.error("Error fetching user data:", error);
@@ -113,6 +123,11 @@ export async function POST(req: Request): Promise<NextResponse> {
           lastClaimedDay: "",
           claimedCheckpoints: [],
           gifts: [],
+          isNewUser: true,
+          walletAddress: null,
+          isWalletConnected: false,
+          dailyPlays: 0,
+          lastPlayedDate: null
         },
         include: {
           taskCompletions: true,
@@ -141,6 +156,11 @@ export async function POST(req: Request): Promise<NextResponse> {
       completedTaskIds,
       referrals: user.referrals,
       referredBy: user.referredBy,
+      isNewUser: user.isNewUser,
+      walletAddress: user.walletAddress,
+      isWalletConnected: user.isWalletConnected,
+      dailyPlays: user.dailyPlays,
+      lastPlayedDate: user.lastPlayedDate
     });
   } catch (error) {
     console.error("Error processing user data:", error);

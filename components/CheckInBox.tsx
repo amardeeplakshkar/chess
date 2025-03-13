@@ -20,14 +20,33 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, 
 
   // Determine if this checkpoint is claimable today
   const isClaimableToday = () => {
-    if (!user?.lastClaimedDay) {
+    // If user has never checked in, only Day 01 is claimable
+    if (!user?.lastCheckIn) {
       return day === "Day 01";
     }
 
-    const currentDayNumber = parseInt(user?.lastClaimedDay.split(" ")[1]);
-    const thisDayNumber = parseInt(day.split(" ")[1]);
+    const lastCheckIn = new Date(user.lastCheckIn);
+    lastCheckIn.setHours(0, 0, 0, 0);
     
-    return thisDayNumber === currentDayNumber + 1;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
+
+    // If more than 1 day has passed, streak is broken - only Day 01 is claimable
+    if (daysDifference > 1) {
+      return day === "Day 01";
+    }
+
+    // For consecutive days, next day should be claimable
+    if (daysDifference === 1) {
+      const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1]);
+      const thisDayNumber = parseInt(day.split(" ")[1]);
+      return thisDayNumber === currentDayNumber + 1;
+    }
+
+    // If trying to claim on the same day
+    return false;
   };
 
   const handleCheckIn = async (userId: number, checkpointId: string, points: number, day: string, isSpecial: boolean | undefined, bgImage: string | undefined) => {

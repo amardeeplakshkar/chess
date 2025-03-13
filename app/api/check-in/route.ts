@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // If user has never checked in before, allow them to start with Day 01
+        // If user has never checked in before, they must start with Day 01
         if (!user.lastCheckIn) {
             if (day !== "Day 01") {
                 return NextResponse.json({ error: 'Must start with Day 01' }, { status: 400 });
@@ -59,11 +59,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Already claimed today' }, { status: 400 });
         }
 
-        // Get the current day number from lastClaimedDay (e.g., "Day 01" -> 1)
-        const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1]);
-        const nextDayNumber = currentDayNumber + 1;
-        const expectedNextDay = `Day ${String(nextDayNumber).padStart(2, '0')}`;
-
         // If streak is broken (more than 1 day has passed)
         if (daysDifference > 1) {
             if (day !== "Day 01") {
@@ -75,9 +70,9 @@ export async function POST(req: Request) {
                 where: { telegramId: numericUserId },
                 data: {
                     points: { increment: points },
-                    claimedCheckpoints: [checkpointId],
+                    claimedCheckpoints: [checkpointId], // Reset claimed checkpoints
                     streak: 1,
-                    gifts: bgImage ? [bgImage] : [],
+                    gifts: bgImage ? [bgImage] : [], // Reset gifts
                     lastCheckIn: today,
                     lastClaimedDay: "Day 01"
                 },
@@ -91,6 +86,10 @@ export async function POST(req: Request) {
         }
 
         // For consecutive days, verify correct day is being claimed
+        const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1]);
+        const nextDayNumber = currentDayNumber + 1;
+        const expectedNextDay = `Day ${String(nextDayNumber).padStart(2, '0')}`;
+
         if (day !== expectedNextDay) {
             return NextResponse.json({ 
                 error: `Must claim ${expectedNextDay} next` 
