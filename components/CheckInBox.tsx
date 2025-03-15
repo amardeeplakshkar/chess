@@ -30,8 +30,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
   // Determine if this checkpoint is claimable today
   const isClaimableToday = () => {
     try {
-      // If user has never checked in, only Day 01 is claimable
-      if (!user?.lastCheckIn) {
+      if (!user?.lastCheckIn || !user?.lastClaimedDay) {
         return day === "Day 01";
       }
 
@@ -43,19 +42,16 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
       
       const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
 
-      // If more than 1 day has passed, streak is broken - only Day 01 is claimable
       if (daysDifference > 1) {
         return day === "Day 01";
       }
 
-      // For consecutive days, next day should be claimable
       if (daysDifference === 1) {
-        const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1]);
-        const thisDayNumber = parseInt(day.split(" ")[1]);
+        const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1] || "0");
+        const thisDayNumber = parseInt(day.split(" ")[1] || "0");
         return thisDayNumber === currentDayNumber + 1;
       }
 
-      // If trying to claim on the same day
       return false;
     } catch (error) {
       console.error("Error in isClaimableToday:", error);
@@ -98,11 +94,11 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
         }
         toast.success(`Check-in successful! Points: ${data.points}, Streak: ${data.streak}`);
       } else {
-        toast.error(data.error || 'Check-in failed');
+        toast.error(data.error || "Check-in failed");
       }
     } catch (error) {
       console.error("Check-in error:", error);
-      toast.error('Failed to check in. Please try again.');
+      toast.error("Failed to check in. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -125,26 +121,26 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
       ) : (
         <div
           className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""}`}
-          style={
-            isClaimable 
+          style={{
+            ...(isClaimable 
               ? {
-                backgroundColor: "white",
-                borderWidth: "2px",
-                borderStyle: "dashed",
-                borderColor: "black",
-                color: "black",
-                backgroundImage: bgImage ? `url(${bgImage})` : undefined,
-                backgroundSize: "cover",
-                backgroundPosition: "center"
-              } 
+                  backgroundColor: "white",
+                  borderWidth: "2px",
+                  borderStyle: "dashed",
+                  borderColor: "black",
+                  color: "black",
+                  backgroundImage: bgImage ? `url(${bgImage})` : undefined,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center"
+                } 
               : isSpecial && bgImage 
                 ? { 
-                  backgroundImage: `url(${bgImage})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center" 
-                } 
-                : { backgroundColor: "#141414" }
-          }
+                    backgroundImage: `url(${bgImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center" 
+                  } 
+                : { backgroundColor: "#141414" })
+          }}
         >
           <p className="text-xs">{day}</p>
           <CheckpointIcon 
