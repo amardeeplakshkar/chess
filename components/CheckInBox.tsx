@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from "react";
 import CheckpointIcon from "./CheckpointIcon";
 import { Check, Loader } from "lucide-react";
@@ -14,43 +15,56 @@ interface CheckInBoxProps {
   checkpointId: string;
 }
 
-const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, checkpointId, day, points, userId }) => {
+const CheckInBox: React.FC<CheckInBoxProps> = ({ 
+  isClaimed, 
+  bgImage, 
+  isSpecial, 
+  checkpointId, 
+  day, 
+  points, 
+  userId 
+}) => {
   const [loading, setLoading] = useState(false);
   const { user, updateUser } = useUser();
 
   // Determine if this checkpoint is claimable today
   const isClaimableToday = () => {
-    // If user has never checked in, only Day 01 is claimable
-    if (!user?.lastCheckIn) {
-      return day === "Day 01";
+    try {
+      // If user has never checked in, only Day 01 is claimable
+      if (!user?.lastCheckIn) {
+        return day === "Day 01";
+      }
+
+      const lastCheckIn = new Date(user.lastCheckIn);
+      lastCheckIn.setHours(0, 0, 0, 0);
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
+
+      // If more than 1 day has passed, streak is broken - only Day 01 is claimable
+      if (daysDifference > 1) {
+        return day === "Day 01";
+      }
+
+      // For consecutive days, next day should be claimable
+      if (daysDifference === 1) {
+        const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1]);
+        const thisDayNumber = parseInt(day.split(" ")[1]);
+        return thisDayNumber === currentDayNumber + 1;
+      }
+
+      // If trying to claim on the same day
+      return false;
+    } catch (error) {
+      console.error("Error in isClaimableToday:", error);
+      return false;
     }
-
-    const lastCheckIn = new Date(user.lastCheckIn);
-    lastCheckIn.setHours(0, 0, 0, 0);
-    
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
-
-    // If more than 1 day has passed, streak is broken - only Day 01 is claimable
-    if (daysDifference > 1) {
-      return day === "Day 01";
-    }
-
-    // For consecutive days, next day should be claimable
-    if (daysDifference === 1) {
-      const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1]);
-      const thisDayNumber = parseInt(day.split(" ")[1]);
-      return thisDayNumber === currentDayNumber + 1;
-    }
-
-    // If trying to claim on the same day
-    return false;
   };
 
-  const handleCheckIn = async (userId: number, checkpointId: string, points: number, day: string, isSpecial: boolean | undefined, bgImage: string | undefined) => {
-    if (isClaimed || loading) return;
+  const handleCheckIn = async () => {
+    if (isClaimed || loading || !userId) return;
 
     setLoading(true);
 
@@ -58,7 +72,13 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, 
       const response = await fetch("/api/check-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, checkpointId, points, day, bgImage }),
+        body: JSON.stringify({ 
+          userId, 
+          checkpointId, 
+          points, 
+          day, 
+          bgImage 
+        }),
       });
 
       const data = await response.json();
@@ -70,24 +90,31 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, 
             claimedCheckpoints: [checkpointId],
             gifts: bgImage ? [bgImage] : []
           });  
+        } else {
+          updateUser({
+            points,
+            claimedCheckpoints: [checkpointId]
+          });
         }
-        updateUser({
-          points,
-          claimedCheckpoints: [checkpointId]
-        });
-        toast.success(`Check-in successful! New Points: ${data.points}, Streak: ${data.streak}`);
+        toast.success(`Check-in successful! Points: ${data.points}, Streak: ${data.streak}`);
       } else {
-        toast.error(`Error: ${data.error}`);
+        toast.error(data.error || 'Check-in failed');
       }
     } catch (error) {
-      toast.error(`Check-in failed: ${error}`);
+      console.error("Check-in error:", error);
+      toast.error('Failed to check in. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  const isClaimable = isClaimableToday();
+
   return (
-    <div onClick={() => isClaimableToday() && handleCheckIn(userId, checkpointId, points, day, isSpecial, bgImage)} className="cursor-pointer">
+    <div 
+      onClick={() => isClaimable && handleCheckIn()} 
+      className={`cursor-pointer ${loading ? 'pointer-events-none' : ''}`}
+    >
       {isClaimed ? (
         <div className="bg-gradient-to-tr border-[#016f15] border shadow-sm shadow-[#016f15] from-[#141414] via-[#016f15] to-[#141414] gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center">
           <p className="text-white/45 text-xs">{day}</p>
@@ -99,24 +126,45 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({ isClaimed, bgImage, isSpecial, 
         <div
           className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""}`}
           style={
-            isClaimableToday() 
+            isClaimable 
               ? {
                 backgroundColor: "white",
                 borderWidth: "2px",
                 borderStyle: "dashed",
                 borderColor: "black",
                 color: "black",
-                backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center"
+                backgroundImage: bgImage ? `url(${bgImage})` : undefined,
+                backgroundSize: "cover",
+                backgroundPosition: "center"
               } 
               : isSpecial && bgImage 
-                ? { backgroundImage: `url(${bgImage})`, backgroundSize: "cover", backgroundPosition: "center" } 
+                ? { 
+                  backgroundImage: `url(${bgImage})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center" 
+                } 
                 : { backgroundColor: "#141414" }
           }
         >
           <p className="text-xs">{day}</p>
-          <CheckpointIcon theme={isClaimableToday() ? true : false} className={`${isSpecial && "opacity-0"}`} height={30} width={30} />
-          <h3 className={`${isSpecial && "opacity-0"} text-xl font-semibold`}>{points}</h3>
-          <p className="text-inherit/45 text-xs">{loading ? <Loader className="animate-spin" height={15} width={15} /> : isClaimableToday() ? "Claim" : "Soon"}</p>
+          <CheckpointIcon 
+            theme={isClaimable} 
+            className={`${isSpecial ? "opacity-0" : ""}`} 
+            height={30} 
+            width={30} 
+          />
+          <h3 className={`${isSpecial ? "opacity-0" : ""} text-xl font-semibold`}>
+            {points}
+          </h3>
+          <p className="text-inherit/45 text-xs">
+            {loading ? (
+              <Loader className="animate-spin" height={15} width={15} />
+            ) : isClaimable ? (
+              "Claim"
+            ) : (
+              "Soon"
+            )}
+          </p>
         </div>
       )}
     </div>

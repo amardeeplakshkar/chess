@@ -70,9 +70,9 @@ export async function POST(req: Request) {
                 where: { telegramId: numericUserId },
                 data: {
                     points: { increment: points },
-                    claimedCheckpoints: [checkpointId], // Reset claimed checkpoints
+                    claimedCheckpoints: [checkpointId], // Reset claimed checkpoints array
                     streak: 1,
-                    gifts: bgImage ? [bgImage] : [], // Reset gifts
+                    gifts: bgImage ? [bgImage] : [], // Reset gifts array
                     lastCheckIn: today,
                     lastClaimedDay: "Day 01"
                 },
