@@ -35,7 +35,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
   
 
   const resetCheckIn = async (userId: number) => {
-    await fetch("/api/reset-check-in", {
+    await fetch("/api/check-in/reset", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId }),
