@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CheckpointIcon from "./CheckpointIcon";
 import { Check, Loader } from "lucide-react";
 import toast from "react-hot-toast";
@@ -15,17 +15,32 @@ interface CheckInBoxProps {
   checkpointId: string;
 }
 
-const CheckInBox: React.FC<CheckInBoxProps> = ({ 
-  isClaimed, 
-  bgImage, 
-  isSpecial, 
-  checkpointId, 
-  day, 
-  points, 
-  userId 
+const CheckInBox: React.FC<CheckInBoxProps> = ({
+  isClaimed,
+  bgImage,
+  isSpecial,
+  checkpointId,
+  day,
+  points,
+  userId
 }) => {
   const [loading, setLoading] = useState(false);
   const { user, updateUser } = useUser();
+
+  useEffect(() => {
+    if (isClaimableToday() === "reset") {
+      resetCheckIn(userId);
+    }
+  }, [userId]);
+  
+
+  const resetCheckIn = async (userId: number) => {
+    await fetch("/api/reset-check-in", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    });
+  };
 
   // Determine if this checkpoint is claimable today
   const isClaimableToday = () => {
@@ -36,15 +51,13 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
 
       const lastCheckIn = new Date(user.lastCheckIn);
       lastCheckIn.setHours(0, 0, 0, 0);
-      
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
 
-      if (daysDifference > 1) {
-        return day === "Day 01";
-      }
+      if (daysDifference > 1) return "reset";
 
       if (daysDifference === 1) {
         const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1] || "0");
@@ -68,12 +81,12 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
       const response = await fetch("/api/check-in", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          userId, 
-          checkpointId, 
-          points, 
-          day, 
-          bgImage 
+        body: JSON.stringify({
+          userId,
+          checkpointId,
+          points,
+          day,
+          bgImage
         }),
       });
 
@@ -85,7 +98,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
             points,
             claimedCheckpoints: [checkpointId],
             gifts: bgImage ? [bgImage] : []
-          });  
+          });
         } else {
           updateUser({
             points,
@@ -107,8 +120,8 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
   const isClaimable = isClaimableToday();
 
   return (
-    <div 
-      onClick={() => isClaimable && handleCheckIn()} 
+    <div
+      onClick={() => isClaimable && handleCheckIn()}
       className={`cursor-pointer ${loading ? 'pointer-events-none' : ''}`}
     >
       {isClaimed ? (
@@ -122,32 +135,32 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
         <div
           className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""}`}
           style={{
-            ...(isClaimable 
+            ...(isClaimable
               ? {
-                  backgroundColor: "white",
-                  borderWidth: "2px",
-                  borderStyle: "dashed",
-                  borderColor: "black",
-                  color: "black",
-                  backgroundImage: bgImage ? `url(${bgImage})` : undefined,
+                backgroundColor: "white",
+                borderWidth: "2px",
+                borderStyle: "dashed",
+                borderColor: "black",
+                color: "black",
+                backgroundImage: bgImage ? `url(${bgImage})` : undefined,
+                backgroundSize: "cover",
+                backgroundPosition: "center"
+              }
+              : isSpecial && bgImage
+                ? {
+                  backgroundImage: `url(${bgImage})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center"
-                } 
-              : isSpecial && bgImage 
-                ? { 
-                    backgroundImage: `url(${bgImage})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center" 
-                  } 
+                }
                 : { backgroundColor: "#141414" })
           }}
         >
           <p className="text-xs">{day}</p>
-          <CheckpointIcon 
-            theme={isClaimable} 
-            className={`${isSpecial ? "opacity-0" : ""}`} 
-            height={30} 
-            width={30} 
+          <CheckpointIcon
+            theme={true}
+            className={`${isSpecial ? "opacity-0" : ""}`}
+            height={30}
+            width={30}
           />
           <h3 className={`${isSpecial ? "opacity-0" : ""} text-xl font-semibold`}>
             {points}
