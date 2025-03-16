@@ -28,14 +28,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
   const [loading, setLoading] = useState(false);
   const { user, updateUser } = useUser();
   const router = useRouter()
-  useEffect(() => {
-    if (isClaimableToday() === "reset") {
-      resetCheckIn();
-      router.refresh()
-      toast.success("Check-in streak reset. Start fresh with Day 01!");
-    }
-  }, [userId]);
-
+  
   const resetCheckIn = async () => {
     try {
       const response = await fetch("/api/check-in/reset", {
@@ -70,19 +63,27 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
       const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
 
       if (daysDifference > 1) return "reset";
-
+      
       if (daysDifference === 1) {
         const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1] || "0");
         const thisDayNumber = parseInt(day.split(" ")[1] || "0");
         return thisDayNumber === currentDayNumber + 1;
       }
-
+      
       return false;
     } catch (error) {
       console.error("Error in isClaimableToday:", error);
       return false;
     }
   };
+  
+  useEffect(() => {
+    if (isClaimableToday() === "reset") {
+      resetCheckIn();
+      router.push(window.location.pathname);
+      toast.success("Check-in streak reset. Start fresh with Day 01!");
+    }
+  }, [userId, isClaimableToday, resetCheckIn]);
 
   const handleCheckIn = async () => {
     if (isClaimed || loading || !userId) return;
@@ -169,7 +170,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
         >
           <p className="text-xs">{day}</p>
           <CheckpointIcon
-            theme={false}
+            theme={isClaimable ? true : false}
             className={`${isSpecial ? "opacity-0" : ""}`}
             height={30}
             width={30}
