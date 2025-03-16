@@ -85,7 +85,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
       router.push(window.location.pathname);
       WebApp.close();
       setTimeout(() => {
-        window.open("https://t.me/YourBot?start=YOUR_START_PARAM", "_blank");
+        window.open("https://t.me/CheckpointCryptoBot/app", "_blank");
       }, 100);
       return;
     }
