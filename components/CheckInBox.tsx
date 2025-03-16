@@ -44,6 +44,8 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
           claimedCheckpoints: [],
           points: 0
         });
+        router.push(window.location.pathname);
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error resetting check-in:", error);
@@ -82,11 +84,9 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
   useEffect(() => {
     if (isClaimableToday() === "reset") {
       resetCheckIn();
-      router.push(window.location.pathname);
-      window.location.reload();
       return;
     }
-  }, [userId, isClaimableToday, resetCheckIn, WebApp]);
+  }, [userId,WebApp]);
 
   const handleCheckIn = async () => {
     if (isClaimed || loading || !userId) return;
