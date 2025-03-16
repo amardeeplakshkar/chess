@@ -23,8 +23,8 @@ export async function POST(req: Request) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // If user has never checked in before, they must start with Day 01
-        if (!user.lastCheckIn) {
+        // If user has never checked in before or is starting over
+        if (!user.lastCheckIn || user.streak === 0) {
             if (day !== "Day 01") {
                 return NextResponse.json({ error: 'Must start with Day 01' }, { status: 400 });
             }
@@ -70,9 +70,9 @@ export async function POST(req: Request) {
                 where: { telegramId: numericUserId },
                 data: {
                     points: { increment: points },
-                    claimedCheckpoints: [checkpointId], // Reset claimed checkpoints array
+                    claimedCheckpoints: [checkpointId],
                     streak: 1,
-                    gifts: bgImage ? [bgImage] : [], // Reset gifts array
+                    gifts: bgImage ? [bgImage] : [],
                     lastCheckIn: today,
                     lastClaimedDay: "Day 01"
                 },

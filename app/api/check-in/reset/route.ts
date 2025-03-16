@@ -15,7 +15,8 @@ export async function POST(req: Request) {
       data: {
         claimedCheckpoints: [],
         lastCheckIn: null,
-        lastClaimedDay: null,
+        lastClaimedDay: "Day 01",
+        streak: 0
       },
     });
 

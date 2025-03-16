@@ -29,20 +29,30 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
 
   useEffect(() => {
     if (isClaimableToday() === "reset") {
-      resetCheckIn(userId);
+      resetCheckIn();
     }
   }, [userId]);
-  
 
-  const resetCheckIn = async (userId: number) => {
-    await fetch("/api/check-in/reset", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId }),
-    });
+  const resetCheckIn = async () => {
+    try {
+      const response = await fetch("/api/check-in/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (response.ok) {
+        updateUser({
+          claimedCheckpoints: [],
+          points: 0
+        });
+        toast.success("Check-in streak reset. Start fresh with Day 01!");
+      }
+    } catch (error) {
+      console.error("Error resetting check-in:", error);
+    }
   };
 
-  // Determine if this checkpoint is claimable today
   const isClaimableToday = () => {
     try {
       if (!user?.lastCheckIn || !user?.lastClaimedDay) {
@@ -157,7 +167,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
         >
           <p className="text-xs">{day}</p>
           <CheckpointIcon
-            theme={true}
+            theme={false}
             className={`${isSpecial ? "opacity-0" : ""}`}
             height={30}
             width={30}
@@ -168,6 +178,8 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
           <p className="text-inherit/45 text-xs">
             {loading ? (
               <Loader className="animate-spin" height={15} width={15} />
+            ) : isClaimable === "reset" ? (
+              "Start Over"
             ) : isClaimable ? (
               "Claim"
             ) : (
