@@ -81,7 +81,6 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
     if (isClaimableToday() === "reset") {
       resetCheckIn();
       router.push(window.location.pathname);
-      toast.success("Check-in streak reset. Start fresh with Day 01!");
     }
   }, [userId, isClaimableToday, resetCheckIn]);
 
