@@ -31,6 +31,8 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
   useEffect(() => {
     if (isClaimableToday() === "reset") {
       resetCheckIn();
+      router.refresh()
+      toast.success("Check-in streak reset. Start fresh with Day 01!");
     }
   }, [userId]);
 
@@ -48,8 +50,6 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
           points: 0
         });
       }
-      router.push("/")
-      toast.success("Check-in streak reset. Start fresh with Day 01!");
     } catch (error) {
       console.error("Error resetting check-in:", error);
     }
