@@ -4,6 +4,7 @@ import CheckpointIcon from "./CheckpointIcon";
 import { Check, Loader } from "lucide-react";
 import toast from "react-hot-toast";
 import { useUser } from "./providers/UserProvider";
+import { useRouter } from "next/navigation";
 
 interface CheckInBoxProps {
   day: string;
@@ -26,7 +27,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { user, updateUser } = useUser();
-
+  const router = useRouter()
   useEffect(() => {
     if (isClaimableToday() === "reset") {
       resetCheckIn();
@@ -46,8 +47,9 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
           claimedCheckpoints: [],
           points: 0
         });
-        toast.success("Check-in streak reset. Start fresh with Day 01!");
       }
+      router.push("/")
+      toast.success("Check-in streak reset. Start fresh with Day 01!");
     } catch (error) {
       console.error("Error resetting check-in:", error);
     }
