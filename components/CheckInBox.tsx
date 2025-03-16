@@ -5,6 +5,7 @@ import { Check, Loader } from "lucide-react";
 import toast from "react-hot-toast";
 import { useUser } from "./providers/UserProvider";
 import { useRouter } from "next/navigation";
+import { useTelegram } from "./providers/TelegramData";
 
 interface CheckInBoxProps {
   day: string;
@@ -28,7 +29,8 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
   const [loading, setLoading] = useState(false);
   const { user, updateUser } = useUser();
   const router = useRouter()
-  
+  const { WebApp } = useTelegram()
+
   const resetCheckIn = async () => {
     try {
       const response = await fetch("/api/check-in/reset", {
@@ -63,26 +65,31 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
       const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
 
       if (daysDifference > 1) return "reset";
-      
+
       if (daysDifference === 1) {
         const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1] || "0");
         const thisDayNumber = parseInt(day.split(" ")[1] || "0");
         return thisDayNumber === currentDayNumber + 1;
       }
-      
+
       return false;
     } catch (error) {
       console.error("Error in isClaimableToday:", error);
       return false;
     }
   };
-  
+
   useEffect(() => {
     if (isClaimableToday() === "reset") {
       resetCheckIn();
       router.push(window.location.pathname);
+      WebApp.close();
+      setTimeout(() => {
+        window.open("https://t.me/YourBot?start=YOUR_START_PARAM", "_blank");
+      }, 100);
+      return;
     }
-  }, [userId, isClaimableToday, resetCheckIn]);
+  }, [userId, isClaimableToday, resetCheckIn, WebApp]);
 
   const handleCheckIn = async () => {
     if (isClaimed || loading || !userId) return;
