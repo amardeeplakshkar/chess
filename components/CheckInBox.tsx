@@ -82,9 +82,8 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
   useEffect(() => {
     if (isClaimableToday() === "reset") {
       resetCheckIn();
-      window.open("https://t.me/CheckpointCryptoBot/app", "_blank");
       router.push(window.location.pathname);
-      WebApp.close();
+      window.location.reload();
       return;
     }
   }, [userId, isClaimableToday, resetCheckIn, WebApp]);
