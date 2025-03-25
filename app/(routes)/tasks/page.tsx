@@ -108,12 +108,35 @@ const Tasks = () => {
             points: 50,
             iconBg: "bg-violet-500",
             onClick: () => handleShareStory("SM2a1b3c4d6e7f8a9b0c1d05", 50, "https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/checkpoint",
-                "Check out this awesome story!",
+                `${APP_URL}${user?.telegramId}`,
                 { url: `${APP_URL}${user?.telegramId}`, name: "Visit Now" })
         },
     ];
 
     const partnerAirdropTasks = [
+        {
+            name: "Treasury",
+            logo: "https://res.cloudinary.com/daqm901wx/image/upload/f_auto,q_auto/v1/checkpoint/treasury",
+            partnerBg: "https://res.cloudinary.com/daqm901wx/image/upload/f_gif,q_auto/v1/checkpoint/treasuryBG",
+            tasks: [
+                {
+                    id: "PA2a1b3c4d6e7f8a9b0c1d10",
+                    title: "Join Treasury",
+                    taskIcon: <BsTelegram />,
+                    points: 50,
+                    url: "https://t.me/treasury_official_bot/app?startapp=6102684114",
+                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d10", "https://t.me/treasury_official_bot/app?startapp=6102684114", 50)
+                },
+                {
+                    id: "PA2a1b3c4d6e7f8a9b0c1d11",
+                    title: "Join Treasury Community",
+                    taskIcon: <BsPersonCheck />,
+                    points: 30,
+                    url: "https://t.me/treasury_official",
+                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d11", "https://t.me/treasury_official", 30)
+                }
+            ]
+        },
         {
             name: "CAPS",
             logo: "https://lh7-rt.googleusercontent.com/docsz/AD_4nXddJ88joyuEsh9xbly9ELg6PKHGMW0m5XicnY3CN6Hm3yuzNQKLAHPOXnahPmt0Doh0JrsRZsVZ09XrIaIMznVoAxgVX90zRXKm7lrSTTPm9vSxn8dmwhkCWhcFJ-TxFvLXe7eoow?key=oDc7xJx6NO6bFvZceoMhlCBH",
@@ -137,6 +160,7 @@ const Tasks = () => {
                 }
             ]
         },
+
         // {
         //     name: "Partner B Airdrop",
         //     logo: "https://images.squarespace-cdn.com/content/v1/5313d422e4b0aeaef76ef185/6da8296e-c16e-478c-8b4f-598f8e05db98/IAGE+Logo.jpg",

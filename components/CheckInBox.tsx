@@ -4,7 +4,7 @@ import CheckpointIcon from "./CheckpointIcon";
 import { Check, Loader } from "lucide-react";
 import toast from "react-hot-toast";
 import { useUser } from "./providers/UserProvider";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useTelegram } from "./providers/TelegramData";
 
 interface CheckInBoxProps {
@@ -28,7 +28,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { user, updateUser } = useUser();
-  const router = useRouter()
+  // const router = useRouter()
   const { WebApp } = useTelegram()
 
   const resetCheckIn = async () => {
@@ -42,10 +42,12 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
       if (response.ok) {
         updateUser({
           claimedCheckpoints: [],
-          points: 0
+          points: 0,
+          lastCheckIn: null,
+          lastClaimedDay: ""
         });
-        router.push(window.location.pathname);
-        window.location.reload();
+        // router.push(window.location.pathname);
+        // window.location.reload();
       }
     } catch (error) {
       console.error("Error resetting check-in:", error);

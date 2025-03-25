@@ -4,8 +4,10 @@ import CurrentChapter from "@/components/CurrentChapter";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { prisma } from "@/lib/prisma";
+import { unstable_noStore as noStore } from "next/cache";
 
 const getData = async () => {
+    noStore();
     return await prisma.user.findMany({
         orderBy: { points: "desc" },
         take: 20,
@@ -34,7 +36,7 @@ interface User {
     isWalletConnected: boolean;
     dailyPlays: number;
     lastPlayedDate?: Date;
-  }
+}
 
 export default async function DataPage() {
     const data = await getData();
@@ -85,12 +87,12 @@ export default async function DataPage() {
                                 <div>
                                     <h3 className="text-base line-clamp-1 font-semibold">{item.firstName || item.username}</h3>
                                     <p className="flex items-center gap-1 text-muted-foreground text-xs">
-                                    <CheckpointIcon height={16} width={16} /> {item.points.toLocaleString()} CPs
+                                        <CheckpointIcon height={16} width={16} /> {item.points.toLocaleString()} CPs
                                     </p>
                                 </div>
                             </div>
                             <div className="text-right pr-2">
-                                
+
                                 {medalEmoji || `#${position}`}
                             </div>
                         </div>
