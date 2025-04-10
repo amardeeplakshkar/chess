@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(req: Request) {
     try {
-        const { userId, checkpointId, points, day, bgImage  } = await req.json();
+        const { userId, checkpointId, points, day } = await req.json();
 
         const numericUserId = Number(userId);
         if (isNaN(numericUserId)) {
@@ -34,7 +34,6 @@ export async function POST(req: Request) {
                 data: {
                     points: { increment: points },
                     claimedCheckpoints: { push: checkpointId },
-                    gifts: { push: bgImage ? bgImage : [] },
                     streak: 1,
                     lastCheckIn: today,
                     lastClaimedDay: day
@@ -72,7 +71,6 @@ export async function POST(req: Request) {
                     points: { increment: points },
                     claimedCheckpoints: [checkpointId],
                     streak: 1,
-                    gifts: bgImage ? [bgImage] : [],
                     lastCheckIn: today,
                     lastClaimedDay: "Day 01"
                 },
@@ -102,7 +100,6 @@ export async function POST(req: Request) {
             data: {
                 points: { increment: points },
                 claimedCheckpoints: { push: checkpointId },
-                gifts: { push: bgImage ? bgImage : [] },
                 streak: { increment: 1 },
                 lastCheckIn: today,
                 lastClaimedDay: day

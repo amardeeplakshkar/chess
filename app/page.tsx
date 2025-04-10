@@ -6,7 +6,7 @@ import { useTelegram } from '@/components/providers/TelegramData'
 import { useUser } from '@/components/providers/UserProvider'
 import { CheckInModel } from '@/components/ui/checkinModel'
 import MedalIcon from '@/components/ui/MedalType'
-import { APP_URL, COMMUNITY_URL } from '@/constants'
+import { APP_URL, checkpoints, COMMUNITY_URL } from '@/constants'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -15,14 +15,69 @@ const HomePage = () => {
   const { user, updateUser } = useUser()
   const router = useRouter()
   const { WebApp, userData, startParam } = useTelegram()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const userId = user?.telegramId;
 
   useEffect(() => {
-    if (!user) {
-      setIsModalOpen(true)
+    if (user) {
+      const lastCheckIn = new Date(user?.lastCheckIn);
+      lastCheckIn.setHours(0, 0, 0, 0);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (lastCheckIn.getTime() !== today.getTime()) {
+        setIsModalOpen(true)
+      }
     }
   }, [user])
+
+  const isClaimableToday = () => {
+    try {
+      const lastCheckIn = new Date(user.lastCheckIn);
+      lastCheckIn.setHours(0, 0, 0, 0);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (daysDifference > 1) return "reset";
+      return false;
+    } catch (error) {
+      console.error("Error in isClaimableToday:", error);
+      return false;
+    }
+  };
+
+  const resetCheckIn = async () => {
+    try {
+      const response = await fetch("/api/check-in/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (response.ok) {
+        updateUser({
+          claimedCheckpoints: null,
+          points: 0,
+          lastCheckIn: null,
+          lastClaimedDay: ""
+        });
+      }
+    } catch (error) {
+      console.error("Error resetting check-in:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    if (isClaimableToday() === "reset") {
+      resetCheckIn();
+      return;
+    }
+  }, [userId, WebApp]);
 
   useEffect(() => {
     const processReferral = async () => {
@@ -87,7 +142,10 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <CheckInModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {checkpoints.map((data, i) =>
+        <CheckInModel key={i} checkpointId={data.id} userId={user?.telegramId} points={data.number} day={data.day} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      )
+      }
       <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
         <Button onClick={() => router.replace(`${COMMUNITY_URL}`)} className='w-full bg-white text-black font-semibold'>
           Join Community
