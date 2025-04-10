@@ -77,7 +77,7 @@ const Tasks = () => {
     const socialMediaTasks = [
         {
             id: "SM2a1b3c4d6e7f8a9b0c1d06",
-            title: "Add 🗺️ to your Name",
+            title: "Add ♟️ to your Name",
             taskIcon: <CheckpointIcon height={24} width={24} />,
             points: 50,
             iconBg: "bg-teal-700",
@@ -235,12 +235,12 @@ const Tasks = () => {
 
     const handleEmojiTask = async (taskId: string, points: number) => {
         setLoadingTask(taskId);
-        if (userData?.firstName?.includes("🗺️") || userData?.lastName?.includes("🗺️")) {
+        if (userData?.firstName?.includes("♟️") || userData?.lastName?.includes("♟️")) {
             completeTask(taskId, points);
             setLoadingTask(null);
         } else {
-            await navigator.clipboard.writeText("🗺️");
-            toast.success("🗺️ Copied to clipboard!");
+            await navigator.clipboard.writeText("♟️");
+            toast.success("♟️ Copied to clipboard!");
             setLoadingTask(null);
         }
     }

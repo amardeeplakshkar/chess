@@ -3,13 +3,7 @@
 import React from 'react'
 import CheckpointIcon from './CheckpointIcon'
 import Button from './Button'
-import { Button as Button2 } from './ui/button'
 import Countdown from './CountDown'
-import { CalendarCheck } from 'lucide-react'
-import { Drawer, DrawerContent, DrawerTrigger } from './ui/drawer'
-import { CheckInBox } from './CheckInBox'
-import { ScrollArea } from './ui/scroll-area'
-import { checkpoints } from '@/constants'
 import { useUser } from './providers/UserProvider'
 
 const CurrentChapter = () => {
@@ -21,30 +15,10 @@ const CurrentChapter = () => {
         {(user?.points || 0).toLocaleString()}
       </Button>
       <div className='flex justify-center items-center gap-2'>
-        <Drawer>
-          <DrawerTrigger asChild suppressHydrationWarning>
-            <Button2 variant={"outline"} size={"icon"}>
-              <CalendarCheck />
-            </Button2>
-          </DrawerTrigger>
-          <DrawerContent className=''>
-            <ScrollArea className='h-[45dvh]'>
-              <div className='flex p-4 *:cursor-pointer flex-wrap gap-2 items-center justify-center'>
-                {
-                  checkpoints.map((checkpoint, index) =>
-                    <div key={index}>
-                      <CheckInBox isClaimed={user?.claimedCheckpoints?.includes(checkpoint.id)} userId={user?.telegramId || 0} checkpointId={checkpoint.id} day={checkpoint.day} bgImage={checkpoint.bgImage} isSpecial={checkpoint.isSpecial} points={checkpoint.number} />
-                    </div>
-                  )
-                }
-              </div>
-            </ScrollArea>
-          </DrawerContent>
-        </Drawer>
         <div className='flex relative flex-col text-white text-2xl uppercase font-bold'>
           Chapter 0
           <div className='flex translate-y-8 absolute self-end flex-nowrap justify-center items-center text-xs gap-2'>
-            <Countdown targetDate="30-03-2025" />
+            <Countdown targetDate="30-04-2025" />
           </div>
         </div>
       </div>

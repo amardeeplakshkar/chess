@@ -14,7 +14,7 @@ interface UserContextType {
   updateUser: (updates: Partial<{ 
     points: number; 
     completedTaskIds: string[]; 
-    claimedCheckpoints?: string[]; 
+    claimedCheckpoints?: string[] | null; 
     gifts?: string[]; 
     lastCheckIn?: Date | null; 
     lastClaimedDay?: string; 
@@ -33,7 +33,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const updateUser = (updates: Partial<{ 
     points: number; 
     completedTaskIds: string[]; 
-    claimedCheckpoints?: string[]; 
+    claimedCheckpoints?: string[] | null; 
     gifts?: string[]; 
     lastCheckIn?: Date | null; 
     lastClaimedDay?: string; 
@@ -41,7 +41,7 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     setUser((prevUser: { 
       points: number; 
       completedTaskIds: string[]; 
-      claimedCheckpoints?: string[]; 
+      claimedCheckpoints?: string[] | null; 
       gifts?: string[]; 
       lastCheckIn?: Date | null; 
       lastClaimedDay?: string; 

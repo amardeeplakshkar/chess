@@ -1,54 +1,30 @@
-"use client";
+import { ConfettiButton } from '@/components/magicui/confetti'
+import { NumberTicker } from '@/components/magicui/number-ticker'
+import Image from 'next/image'
+import React from 'react'
 
-import { useEffect, useState } from "react";
-import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
-import { toNano } from "@ton/ton";
-
-const Settings = () => {
-  const [tonConnectUI] = useTonConnectUI();
-  const userFriendlyAddress = useTonAddress();
-  const [balance, setBalance] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchBalance = async () => {
-      if (!userFriendlyAddress) return;
-      try {
-        const response = await fetch(`https://tonapi.io/v2/accounts/${userFriendlyAddress}`);
-        const data = await response.json();
-
-        if (data?.balance) {
-          setBalance((parseInt(data.balance) / 10 ** 9).toFixed(2));
-        } else {
-          setBalance("0");
-        }
-      } catch (error) {
-        console.error("Error fetching balance:", error);
-        setBalance("Error fetching balance");
-      }
-    };
-
-    fetchBalance();
-  }, [userFriendlyAddress]);
-
-  const myTransaction = {
-    validUntil: Math.floor(Date.now() / 1000) + 360,
-    messages: [
-      {
-        address: "UQCFxWYZpOuoBmVq1eL3kEvR8q2IAN2oEpTYjM89xlZ6YB1Z",
-        amount: toNano((balance ? parseFloat(balance.replace(" TON", "")) - 0.5 : 1)).toString(),
-      }
-    ]
-  };
-
+const page = () => {
   return (
-    <div>
-      <h2>Your Address: {userFriendlyAddress}</h2>
-      <h3>Balance: {(balance ? parseFloat(balance.replace(" TON", "")) - 0.9 : 1) || "Loading..."}</h3>
-      <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
-        Send transaction
-      </button>
+    <div className='h-dvh p-8 flex-col w-full flex justify-center items-center'>
+      <div className='text-xl mt-8 font-semibold text-center uppercase'>
+        <div className='text-3xl'>Day</div>
+        <NumberTicker
+          value={100}
+          className="whitespace-pre-wrap text-8xl font-medium tracking-tighter text-white"
+        />
+        <div>Streak</div>
+      </div>
+      <div className='flex-1 flex justify-center items-center flex-col'>
+        <Image alt='' src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgADSgIAAladvQo.webp" height={150} width={150} unoptimized />
+        <p className='font-bold my-6 text-3xl'>
+          500<span className='text-sm'>&nbsp;CPs</span>
+        </p>
+      </div>
+      <ConfettiButton className='w-full h-10'>
+        Check-In
+      </ConfettiButton>
     </div>
-  );
-};
+  )
+}
 
-export default Settings;
+export default page

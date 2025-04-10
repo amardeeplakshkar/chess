@@ -33,20 +33,22 @@ const DockItems = [
 const Dock = () => {
     const pathname = usePathname()
     return (
-        <div className="absolute bottom-[1rem] left-1/2 transform -translate-x-1/2 bg-[#141414] rounded-full w-[50%]  overflow-hidden grid grid-cols-4 place-items-center">
-            {
-                DockItems.map((item, index) => (
-                    <Link href={item.link} key={index} className={`p-3 px-6 scale-[1.2] rounded-full ${pathname === item.link ? 'bg-white/10' : ''}`}>
-                        {
-                            pathname === item.link ?
-                                <item.icon />
-                                :
-                                <item.icon2 className='h-4 w-4' />
-                        }
-                    </Link>
-                ))
-            }
-        </div>
+        <footer className='flex  justify-center items-center -mt-[2.5rem] mb-2'>
+            <div className='grid overflow-hidden rounded-full grid-cols-4 bg-[#111111] w-[60dvw]'>
+                {
+                    DockItems.map((item, index) => (
+                        <Link href={item.link} key={index} className={`grid place-items-center p-3 px-6 rounded-full ${pathname === item.link ? 'bg-white/10' : ''}`}>
+                            {
+                                pathname === item.link ?
+                                    <item.icon />
+                                    :
+                                    <item.icon2 className='h-4 w-4' />
+                            }
+                        </Link>
+                    ))
+                }
+            </div>
+        </footer>
     )
 }
 

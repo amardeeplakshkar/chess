@@ -1,19 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import Button from '@/components/Button'
-import CheckpointIcon from '@/components/CheckpointIcon'
 import CurrentChapter from '@/components/CurrentChapter'
 import { useTelegram } from '@/components/providers/TelegramData'
 import { useUser } from '@/components/providers/UserProvider'
+import { CheckInModel } from '@/components/ui/checkinModel'
+import MedalIcon from '@/components/ui/MedalType'
 import { APP_URL, COMMUNITY_URL } from '@/constants'
 import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 const HomePage = () => {
   const { user, updateUser } = useUser()
   const router = useRouter()
   const { WebApp, userData, startParam } = useTelegram()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  useEffect(() => {
+    if (!user) {
+      setIsModalOpen(true)
+    }
+  }, [user])
 
   useEffect(() => {
     const processReferral = async () => {
@@ -71,13 +80,14 @@ const HomePage = () => {
         <div className="font-bold uppercase w-full leading-none text-center text-white" style={{ fontSize: '11dvw' }}>Early Access</div>
         <CurrentChapter />
         <div className='flex flex-1 flex-col justify-center items-center'>
-          <CheckpointIcon height={200} width={200} />
+          <MedalIcon height={200} width={200} />
           <div className="font-bold flex justify-center items-end w-full leading-none text-center text-white" style={{ fontSize: '8dvw' }}>
             {(user?.points || 0).toLocaleString()}&nbsp;
             <span className='text-base'>CPs</span>
           </div>
         </div>
       </div>
+      <CheckInModel isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
         <Button onClick={() => router.replace(`${COMMUNITY_URL}`)} className='w-full bg-white text-black font-semibold'>
           Join Community

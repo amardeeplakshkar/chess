@@ -30,7 +30,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
   const { user, updateUser } = useUser();
   // const router = useRouter()
   const { WebApp } = useTelegram()
-
+  const [currentDay, setCurrentDay] = useState<number>()
   const resetCheckIn = async () => {
     try {
       const response = await fetch("/api/check-in/reset", {
@@ -41,13 +41,11 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
 
       if (response.ok) {
         updateUser({
-          claimedCheckpoints: [],
+          claimedCheckpoints: null,
           points: 0,
           lastCheckIn: null,
           lastClaimedDay: ""
         });
-        // router.push(window.location.pathname);
-        // window.location.reload();
       }
     } catch (error) {
       console.error("Error resetting check-in:", error);
@@ -72,6 +70,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
 
       if (daysDifference === 1) {
         const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1] || "0");
+        setCurrentDay(currentDayNumber);
         const thisDayNumber = parseInt(day.split(" ")[1] || "0");
         return thisDayNumber === currentDayNumber + 1;
       }
@@ -182,6 +181,7 @@ const CheckInBox: React.FC<CheckInBoxProps> = ({
           />
           <h3 className={`${isSpecial ? "opacity-0" : ""} text-xl font-semibold`}>
             {points}
+            {currentDay}
           </h3>
           <p className="text-inherit/45 text-xs">
             {loading ? (
