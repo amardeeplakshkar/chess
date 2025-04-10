@@ -28,7 +28,6 @@ export function CheckInModel({
     checkpointId
 }: ProModalProps) {
     const { user, updateUser } = useUser()
-
     const isClaimableToday = () => {
         try {
             if (!user?.lastCheckIn || !user?.lastClaimedDay) {
@@ -57,6 +56,7 @@ export function CheckInModel({
             return false;
         }
     };
+
 
     const handleCheckIn = async () => {
         if (!userId) {
