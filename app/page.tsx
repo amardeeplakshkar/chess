@@ -19,8 +19,19 @@ const HomePage = () => {
   const userId = user?.telegramId;
 
   useEffect(() => {
-    if (user && isClaimableToday()) {
-      setIsModalOpen(true)
+    if (user) {
+      const lastCheckIn = new Date(user?.lastCheckIn);
+      lastCheckIn.setHours(0, 0, 0, 0);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const lastCheckInDate = lastCheckIn.toISOString().slice(0, 10);
+      const todayDate = today.toISOString().slice(0, 10);
+
+      if (lastCheckInDate !== todayDate) {
+        setIsModalOpen(true)
+      }
     }
   }, [user])
 
@@ -34,9 +45,8 @@ const HomePage = () => {
 
       const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
 
-      if (daysDifference > 1) { return "reset" } else{
-        return true
-      };
+      if (daysDifference > 1) return "reset";
+      return false;
     } catch (error) {
       console.error("Error in isClaimableToday:", error);
       return false;
