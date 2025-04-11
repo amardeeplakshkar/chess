@@ -57,7 +57,7 @@ export default async function DataPage() {
             <CurrentChapter />
             <div className="w-full flex justify-center items-center">
                 <Avatar className='w-[8rem] h-[8rem] rounded-none'>
-                    <AvatarImage src="https://res.cloudinary.com/duscymcfc/image/upload/v1/perks/assets/DuckLeaderboard" />
+                    <AvatarImage src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgADXhgAAogOKEg.webp" />
                 </Avatar>
             </div>
             <ScrollArea className="h-[30rem] w-full rounded-md my-4">
