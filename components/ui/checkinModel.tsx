@@ -1,4 +1,3 @@
-
 import {
     Dialog,
     DialogContent,
@@ -28,8 +27,17 @@ export function CheckInModel({
     checkpointId
 }: ProModalProps) {
     const { user, updateUser } = useUser()
+
+    // Check if this checkpoint has already been claimed
+    const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpointId || '');
+
     const isClaimableToday = () => {
         try {
+            // If checkpoint already claimed, return false
+            if (isCheckpointClaimed) {
+                return false;
+            }
+
             if (!user?.lastCheckIn || !user?.lastClaimedDay) {
                 return day === "Day 01";
             }
@@ -57,11 +65,17 @@ export function CheckInModel({
         }
     };
 
-
     const handleCheckIn = async () => {
         if (!userId) {
-            toast.error("login failed")
-        };
+            toast.error("Login failed");
+            return;
+        }
+
+        if (isCheckpointClaimed) {
+            toast.error("You've already claimed this checkpoint");
+            return;
+        }
+
         try {
             const response = await fetch("/api/check-in", {
                 method: "POST",
@@ -88,14 +102,14 @@ export function CheckInModel({
         } catch (error) {
             console.error("Check-in error:", error);
             toast.error("Failed to check in. Please try again.");
-        } finally {
         }
     };
 
-    const isClaimable = isClaimableToday()
+    const isClaimable = isClaimableToday();
+
     return (
         <>
-            {isClaimable &&
+            {isClaimable && !isCheckpointClaimed &&
                 <Dialog open={isOpen} onOpenChange={onClose}>
                     <DialogContent className="">
                         <div className="relative -z-50" id="stars2"></div>
@@ -119,8 +133,8 @@ export function CheckInModel({
                             <div
                                 onClick={() => {
                                     setTimeout(() => {
-                                        handleCheckIn()
-                                        onClose()
+                                        handleCheckIn();
+                                        onClose();
                                     }, 500);
                                 }}
                                 className="w-full">

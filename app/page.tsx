@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import Button from '@/components/Button'
 import CurrentChapter from '@/components/CurrentChapter'
@@ -16,7 +15,6 @@ const HomePage = () => {
   const router = useRouter()
   const { WebApp, userData, startParam } = useTelegram()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const userId = user?.telegramId;
 
   const normalizeDate = (date: Date) => {
     const d = new Date(date);
@@ -24,67 +22,22 @@ const HomePage = () => {
     return d;
   };
 
-  const isClaimableToday = () => {
-    try {
-      if (!user?.lastCheckIn) return false;
-
-      const lastCheckIn = normalizeDate(user?.lastCheckIn);
-      const today = normalizeDate(new Date());
-
-      const diffDays = Math.floor(
-        (today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24)
-      );
-      if (diffDays > 1) return "reset";
-
-      return false;
-    } catch (error) {
-      console.error("Error in isClaimableToday:", error);
-      return false;
-    }
-  };
-
-  const resetCheckIn = async () => {
-    try {
-      const res = await fetch("/api/check-in/reset", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
-      });
-
-      if (res.ok) {
-        updateUser({
-          claimedCheckpoints: null,
-          points: 0,
-          lastCheckIn: null,
-          lastClaimedDay: "",
-        });
-      } else {
-        console.error("Failed to reset check-in:", await res.text());
-      }
-    } catch (error) {
-      console.error("Error resetting check-in:", error);
-    }
-  };
-
   useEffect(() => {
     if (!user || isModalOpen) return;
 
-    const lastCheckInDate = normalizeDate(user?.lastCheckIn).toISOString().slice(0, 10);
-    const todayDate = normalizeDate(new Date()).toISOString().slice(0, 10);
 
-    if (lastCheckInDate !== todayDate) {
+    if (user.claimedCheckpoints.includes(checkpoints[0].id)) {
+      return;
+    }
+
+    const lastCheckIn = user?.lastCheckIn ? normalizeDate(new Date(user.lastCheckIn)) : null;
+    const today = normalizeDate(new Date());
+
+
+    if (!lastCheckIn || lastCheckIn.getTime() !== today.getTime()) {
       setIsModalOpen(true);
     }
-  }, [user, isModalOpen, setIsModalOpen]);
-
-  // Reset streak if broken
-  useEffect(() => {
-    if (!user?.lastCheckIn || !userId) return;
-
-    if (isClaimableToday() === "reset") {
-      resetCheckIn();
-    }
-  }, [user?.lastCheckIn, userId]);
+  }, [user, isModalOpen]);
 
   useEffect(() => {
     const processReferral = async () => {
@@ -118,6 +71,8 @@ const HomePage = () => {
 
   const handleShareStory = (mediaUrl: string, text = "", widgetLink?: { url: string; name?: string }) => {
     if (WebApp) {
+  
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const params: Record<string, any> = {};
 
       if (text) {
@@ -136,6 +91,7 @@ const HomePage = () => {
       console.error("Telegram WebApp SDK not available.");
     }
   }
+
   return (
     <div className='h-full w-full flex flex-col items-center p-4'>
       <div className='flex-1 flex flex-col w-full'>
@@ -165,7 +121,7 @@ const HomePage = () => {
           <Button onClick={() => router.push("/frens")} className='w-full font-semibold'>
             Invite Friends
           </Button>
-          <Button onClick={() => handleShareStory("https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/checkpoint",
+          <Button onClick={() => handleShareStory("httpupload/f_auto,q_auto/v1/Checkpoint/checkpoint",
             "Check out this awesome story!",
             { url: `${APP_URL}${user?.telegramId}`, name: "Visit Now" })} className='w-full font-semibold bg-transparent border'>
             Share Story
