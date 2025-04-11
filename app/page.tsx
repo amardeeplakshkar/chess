@@ -15,6 +15,52 @@ const HomePage = () => {
   const router = useRouter()
   const { WebApp, userData, startParam } = useTelegram()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const userId = user?.telegramId;
+
+  useEffect(() => {
+    if (isClaimableToday() === "reset") {
+      resetCheckIn();
+      return;
+    }
+  }, [userId]);
+
+  const isClaimableToday = () => {
+    try {
+      const lastCheckIn = new Date(user?.lastCheckIn);
+      lastCheckIn.setHours(0, 0, 0, 0);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (daysDifference > 1) return "reset";
+      return false;
+    } catch (error) {
+      console.error("Error in isClaimableToday:", error);
+      return false;
+    }
+  };
+
+  const resetCheckIn = async () => {
+    try {
+      const response = await fetch("/api/check-in/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (response.ok) {
+        updateUser({
+          claimedCheckpoints: null,
+          lastCheckIn: null,
+          lastClaimedDay: ""
+        });
+      }
+    } catch (error) {
+      console.error("Error resetting check-in:", error);
+    }
+  };
 
   const normalizeDate = (date: Date) => {
     const d = new Date(date);
@@ -24,7 +70,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!user || isModalOpen) return;
-    const lastCheckIn = user?.lastCheckIn ? normalizeDate(new Date(user.lastCheckIn)) : null;
+    const lastCheckIn = user?.lastCheckIn ? normalizeDate(new Date(user?.lastCheckIn)) : null;
     const today = normalizeDate(new Date());
 
     if (!lastCheckIn || lastCheckIn.getTime() !== today.getTime()) {
