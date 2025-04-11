@@ -24,11 +24,6 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!user || isModalOpen) return;
-
-    // if (user.claimedCheckpoints.includes(checkpoints[0].id)) {
-    //   return;
-    // }
-
     const lastCheckIn = user?.lastCheckIn ? normalizeDate(new Date(user.lastCheckIn)) : null;
     const today = normalizeDate(new Date());
 
