@@ -9,6 +9,7 @@ import { NumberTicker } from "../magicui/number-ticker"
 import Image from "next/image"
 import { useUser } from "../providers/UserProvider";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 interface ProModalProps {
     isOpen: boolean;
@@ -32,40 +33,71 @@ export function CheckInModel({
 
     // Check if this checkpoint has already been claimed
     const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpointId || '');
-  
-      const isClaimableToday = () => {
-          try {
-              // If checkpoint already claimed, return false
-              if (isCheckpointClaimed) {
-                  return false;
-              }
-  
-              if (!user?.lastCheckIn || !user?.lastClaimedDay) {
-                  return day === "Day 01";
-              }
-  
-              const lastCheckIn = new Date(user.lastCheckIn);
-              lastCheckIn.setHours(0, 0, 0, 0);
-  
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-  
-              const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
-  
-              if (daysDifference > 1) return "reset";
-  
-              if (daysDifference === 1) {
-                  const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1] || "0");
-                  const thisDayNumber = parseInt(day?.split(" ")[1] || "0");
-                  return thisDayNumber === currentDayNumber + 1;
-              }
-  
-              return false;
-          } catch (error) {
-              console.error("Error in isClaimableToday:", error);
-              return false;
-          }
-      };
+
+    useEffect(() => {
+        if (isClaimableToday() === "reset") {
+            resetCheckIn();
+            return;
+        }
+    }, [userId]);
+
+    const isClaimableToday = () => {
+        try {
+            // If checkpoint already claimed, return false
+            if (isCheckpointClaimed) {
+                return false;
+            }
+
+            if (!user?.lastCheckIn || !user?.lastClaimedDay) {
+                return day === "Day 01";
+            }
+
+            const lastCheckIn = new Date(user.lastCheckIn);
+            lastCheckIn.setHours(0, 0, 0, 0);
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
+
+            if (daysDifference > 1) return "reset";
+
+            if (daysDifference === 1) {
+                const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1] || "0");
+                const thisDayNumber = parseInt(day?.split(" ")[1] || "0");
+                return thisDayNumber === currentDayNumber + 1;
+            }
+
+            return false;
+        } catch (error) {
+            console.error("Error in isClaimableToday:", error);
+            return false;
+        }
+    };
+
+    const resetCheckIn = async () => {
+        try {
+            const response = await fetch("/api/check-in/reset", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId }),
+            });
+
+            if (response.ok) {
+                updateUser({
+                    claimedCheckpoints: null,
+                    lastCheckIn: null,
+                    lastClaimedDay: ""
+                });
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("Error resetting check-in:", error);
+        }
+    };
+
+
+
     const handleCheckIn = async () => {
         if (!userId) {
             toast.error("Login failed");
