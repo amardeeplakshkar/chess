@@ -25,14 +25,12 @@ const HomePage = () => {
   useEffect(() => {
     if (!user || isModalOpen) return;
 
-
-    if (user.claimedCheckpoints.includes(checkpoints[0].id)) {
-      return;
-    }
+    // if (user.claimedCheckpoints.includes(checkpoints[0].id)) {
+    //   return;
+    // }
 
     const lastCheckIn = user?.lastCheckIn ? normalizeDate(new Date(user.lastCheckIn)) : null;
     const today = normalizeDate(new Date());
-
 
     if (!lastCheckIn || lastCheckIn.getTime() !== today.getTime()) {
       setIsModalOpen(true);
@@ -71,7 +69,7 @@ const HomePage = () => {
 
   const handleShareStory = (mediaUrl: string, text = "", widgetLink?: { url: string; name?: string }) => {
     if (WebApp) {
-  
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const params: Record<string, any> = {};
 
@@ -105,14 +103,17 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <CheckInModel
-        checkpointId={checkpoints[0].id}
-        userId={user?.telegramId}
-        points={checkpoints[0].number}
-        day={checkpoints[0].day}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      {checkpoints.map((data, i) =>
+        <CheckInModel
+          key={i}
+          checkpointId={data.id}
+          userId={user?.telegramId}
+          points={data.number}
+          day={data.day}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
       <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
         <Button onClick={() => router.replace(`${COMMUNITY_URL}`)} className='w-full bg-white text-black font-semibold'>
           Join Community
