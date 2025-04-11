@@ -151,17 +151,30 @@ const HomePage = () => {
         </div>
       </div>
 
-      {checkpoints.map((data, i) => (
-        <CheckInModel
-          key={i}
-          checkpointId={data.id}
-          userId={user?.telegramId}
-          points={data.number}
-          day={data.day}
-          isOpen={isModalOpen && i === 0}
-          onClose={() => setIsModalOpen(false)}
-        />
-      ))}
+      {
+        isClaimableToday() === "reset" ?
+          checkpoints.map((data, i) => (
+            <CheckInModel
+              key={i}
+              checkpointId={data.id}
+              userId={user?.telegramId}
+              points={data.number}
+              day={data.day}
+              isOpen={isModalOpen && i === 0}
+              onClose={() => setIsModalOpen(false)}
+            />
+          )) : checkpoints.map((data, i) => (
+            <CheckInModel
+              key={i}
+              checkpointId={data.id}
+              userId={user?.telegramId}
+              points={data.number}
+              day={data.day}
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            />
+          ))
+      }
 
       <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
         <Button onClick={() => router.replace(`${COMMUNITY_URL}`)} className='w-full bg-white text-black font-semibold'>
