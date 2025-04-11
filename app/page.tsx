@@ -24,12 +24,9 @@ const HomePage = () => {
     return d
   }
 
-  const isCheckpointClaimed = user?.claimedCheckpoints?.includes(checkpoints[0].id || '')
 
   const isClaimableToday = () => {
     try {
-      if (isCheckpointClaimed) return false
-
       const lastCheckIn = new Date(user?.lastCheckIn)
       lastCheckIn.setHours(0, 0, 0, 0)
 
