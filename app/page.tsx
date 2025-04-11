@@ -29,58 +29,58 @@ const HomePage = () => {
       const lastCheckInDate = lastCheckIn.toISOString().slice(0, 10);
       const todayDate = today.toISOString().slice(0, 10);
 
-      if (lastCheckInDate !== todayDate) {
-        setIsModalOpen(true)
+      if (lastCheckInDate !== todayDate && !isModalOpen) {
+        setIsModalOpen(true);
       }
     }
-  }, [user])
+  }, [isModalOpen, user])
 
-  const isClaimableToday = () => {
-    try {
-      const lastCheckIn = new Date(user.lastCheckIn);
-      lastCheckIn.setHours(0, 0, 0, 0);
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
-
-      if (daysDifference > 1) return "reset";
-      return false;
-    } catch (error) {
-      console.error("Error in isClaimableToday:", error);
-      return false;
-    }
-  };
-
-  const resetCheckIn = async () => {
-    try {
-      const response = await fetch("/api/check-in/reset", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
-      });
-
-      if (response.ok) {
-        updateUser({
-          claimedCheckpoints: null,
-          points: 0,
-          lastCheckIn: null,
-          lastClaimedDay: ""
-        });
-      }
-    } catch (error) {
-      console.error("Error resetting check-in:", error);
-    }
-  };
-
-
+  
+  
   useEffect(() => {
+    const isClaimableToday = () => {
+      try {
+        const lastCheckIn = new Date(user?.lastCheckIn);
+        lastCheckIn.setHours(0, 0, 0, 0);
+  
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+  
+        const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
+  
+        if (daysDifference > 1) return "reset";
+        return false;
+      } catch (error) {
+        console.error("Error in isClaimableToday:", error);
+        return false;
+      }
+    };
+  
+    const resetCheckIn = async () => {
+      try {
+        const response = await fetch("/api/check-in/reset", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
+        });
+  
+        if (response.ok) {
+          updateUser({
+            claimedCheckpoints: null,
+            points: 0,
+            lastCheckIn: null,
+            lastClaimedDay: ""
+          });
+        }
+      } catch (error) {
+        console.error("Error resetting check-in:", error);
+      }
+    };
     if (isClaimableToday() === "reset") {
       resetCheckIn();
       return;
     }
-  }, [userId, WebApp]);
+  }, [userId, WebApp, user?.lastCheckIn, updateUser]);
 
   useEffect(() => {
     const processReferral = async () => {
@@ -90,7 +90,7 @@ const HomePage = () => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              userId: userData.userId,
+              userId: userData?.userId,
               referrerId: startParam
             })
           });
@@ -145,10 +145,16 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      {checkpoints.map((data, i) =>
-        <CheckInModel key={i} checkpointId={data.id} userId={user?.telegramId} points={data.number} day={data.day} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      )
-      }
+      {isModalOpen && (
+        <CheckInModel
+          checkpointId={checkpoints[0].id} 
+          userId={user?.telegramId}
+          points={checkpoints[0].number}
+          day={checkpoints[0].day}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
       <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
         <Button onClick={() => router.replace(`${COMMUNITY_URL}`)} className='w-full bg-white text-black font-semibold'>
           Join Community

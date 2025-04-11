@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Provider } from "@/components/providers/provider";
 import Dock from "@/components/Dock";
 import Script from "next/script";
+import { Provider } from "@/components/providers/provider";
 
 export const metadata: Metadata = {
   title: "Checkpoint",
@@ -32,10 +32,6 @@ export default function RootLayout({
             <Dock />
           </div>
         </Provider>
-        <Script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></Script>
-        <script>
-          AOS.init();
-        </script>
       </body>
     </html>
   );
