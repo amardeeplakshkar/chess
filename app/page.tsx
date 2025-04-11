@@ -24,8 +24,13 @@ const HomePage = () => {
     }
   }, [userId]);
 
+  const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpoints[0].id || '');
+
   const isClaimableToday = () => {
     try {
+      if (isCheckpointClaimed) {
+        return false;
+      }
       const lastCheckIn = new Date(user?.lastCheckIn);
       lastCheckIn.setHours(0, 0, 0, 0);
 
@@ -56,6 +61,7 @@ const HomePage = () => {
           lastCheckIn: null,
           lastClaimedDay: ""
         });
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error resetting check-in:", error);

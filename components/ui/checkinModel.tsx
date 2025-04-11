@@ -9,7 +9,6 @@ import { NumberTicker } from "../magicui/number-ticker"
 import Image from "next/image"
 import { useUser } from "../providers/UserProvider";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
 
 interface ProModalProps {
     isOpen: boolean;
@@ -33,13 +32,6 @@ export function CheckInModel({
 
     // Check if this checkpoint has already been claimed
     const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpointId || '');
-
-    useEffect(() => {
-      if (isClaimableToday() === "reset") {
-        resetCheckIn();
-        return;
-      }
-    }, [userId]);
   
       const isClaimableToday = () => {
           try {
@@ -74,31 +66,6 @@ export function CheckInModel({
               return false;
           }
       };
-
-  const resetCheckIn = async () => {
-    try {
-      const response = await fetch("/api/check-in/reset", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
-      });
-
-      if (response.ok) {
-        updateUser({
-          claimedCheckpoints: null,
-          lastCheckIn: null,
-          lastClaimedDay: ""
-        });
-        // router.push(window.location.pathname);
-        // window.location.reload();
-      }
-    } catch (error) {
-      console.error("Error resetting check-in:", error);
-    }
-  };
-
-
-
     const handleCheckIn = async () => {
         if (!userId) {
             toast.error("Login failed");
