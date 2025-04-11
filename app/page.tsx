@@ -149,16 +149,14 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && (
-        <CheckInModel
-          checkpointId={checkpoints[0].id}
-          userId={user?.telegramId}
-          points={checkpoints[0].number}
-          day={checkpoints[0].day}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
+      <CheckInModel
+        checkpointId={checkpoints[0].id}
+        userId={user?.telegramId}
+        points={checkpoints[0].number}
+        day={checkpoints[0].day}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
       <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
         <Button onClick={() => router.replace(`${COMMUNITY_URL}`)} className='w-full bg-white text-black font-semibold'>
           Join Community
