@@ -18,69 +18,73 @@ const HomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const userId = user?.telegramId;
 
-  useEffect(() => {
-    if (user) {
-      const lastCheckIn = new Date(user?.lastCheckIn);
-      lastCheckIn.setHours(0, 0, 0, 0);
+  const normalizeDate = (date: Date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  };
 
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+  const isClaimableToday = () => {
+    try {
+      if (!user?.lastCheckIn) return false;
 
-      const lastCheckInDate = lastCheckIn.toISOString().slice(0, 10);
-      const todayDate = today.toISOString().slice(0, 10);
+      const lastCheckIn = normalizeDate(user?.lastCheckIn);
+      const today = normalizeDate(new Date());
 
-      if (lastCheckInDate !== todayDate && !isModalOpen) {
-        setIsModalOpen(true);
-      }
+      const diffDays = Math.floor(
+        (today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      if (diffDays > 1) return "reset";
+
+      return false;
+    } catch (error) {
+      console.error("Error in isClaimableToday:", error);
+      return false;
     }
-  }, [isModalOpen, user])
+  };
 
-  
-  
-  useEffect(() => {
-    const isClaimableToday = () => {
-      try {
-        const lastCheckIn = new Date(user?.lastCheckIn);
-        lastCheckIn.setHours(0, 0, 0, 0);
-  
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-  
-        const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
-  
-        if (daysDifference > 1) return "reset";
-        return false;
-      } catch (error) {
-        console.error("Error in isClaimableToday:", error);
-        return false;
-      }
-    };
-  
-    const resetCheckIn = async () => {
-      try {
-        const response = await fetch("/api/check-in/reset", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId }),
+  const resetCheckIn = async () => {
+    try {
+      const res = await fetch("/api/check-in/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (res.ok) {
+        updateUser({
+          claimedCheckpoints: null,
+          points: 0,
+          lastCheckIn: null,
+          lastClaimedDay: "",
         });
-  
-        if (response.ok) {
-          updateUser({
-            claimedCheckpoints: null,
-            points: 0,
-            lastCheckIn: null,
-            lastClaimedDay: ""
-          });
-        }
-      } catch (error) {
-        console.error("Error resetting check-in:", error);
+      } else {
+        console.error("Failed to reset check-in:", await res.text());
       }
-    };
+    } catch (error) {
+      console.error("Error resetting check-in:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!user || isModalOpen) return;
+
+    const lastCheckInDate = normalizeDate(user?.lastCheckIn).toISOString().slice(0, 10);
+    const todayDate = normalizeDate(new Date()).toISOString().slice(0, 10);
+
+    if (lastCheckInDate !== todayDate) {
+      setIsModalOpen(true);
+    }
+  }, [user, isModalOpen, setIsModalOpen]);
+
+  // Reset streak if broken
+  useEffect(() => {
+    if (!user?.lastCheckIn || !userId) return;
+
     if (isClaimableToday() === "reset") {
       resetCheckIn();
-      return;
     }
-  }, [userId, WebApp, user?.lastCheckIn, updateUser]);
+  }, [user?.lastCheckIn, userId]);
 
   useEffect(() => {
     const processReferral = async () => {
@@ -147,7 +151,7 @@ const HomePage = () => {
       </div>
       {isModalOpen && (
         <CheckInModel
-          checkpointId={checkpoints[0].id} 
+          checkpointId={checkpoints[0].id}
           userId={user?.telegramId}
           points={checkpoints[0].number}
           day={checkpoints[0].day}
