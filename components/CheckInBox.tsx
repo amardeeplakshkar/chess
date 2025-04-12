@@ -1,203 +1,119 @@
 'use client'
-import React, { useEffect, useState } from "react";
-import CheckpointIcon from "./CheckpointIcon";
-import { Check, Loader } from "lucide-react";
-import toast from "react-hot-toast";
-import { useUser } from "./providers/UserProvider";
-// import { useRouter } from "next/navigation";
-import { useTelegram } from "./providers/TelegramData";
 
-interface CheckInBoxProps {
-  day: string;
-  points: number;
-  isSpecial?: boolean;
-  isClaimed?: boolean;
-  bgImage?: string;
-  userId: number;
-  checkpointId: string;
+import React, { useEffect, useState } from 'react'
+import { CheckInModel } from './ui/checkinModel';
+import { useUser } from './providers/UserProvider';
+import toast from 'react-hot-toast';
+
+
+interface ProModalProps {
+  day?: string,
+  checkpointId?: string,
+  points?: number
+  userId?: number
 }
 
-const CheckInBox: React.FC<CheckInBoxProps> = ({
-  isClaimed,
-  bgImage,
-  isSpecial,
-  checkpointId,
+export function CheckInBox({
   day,
   points,
-  userId
-}) => {
-  const [loading, setLoading] = useState(false);
-  const { user, updateUser } = useUser();
-  // const router = useRouter()
-  const { WebApp } = useTelegram()
-  const [currentDay, setCurrentDay] = useState<number>()
-  const resetCheckIn = async () => {
-    try {
-      const response = await fetch("/api/check-in/reset", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
-      });
+  userId,
+  checkpointId
+}: ProModalProps) {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const { user, updateUser } = useUser()
+  const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpointId || '')
 
-      if (response.ok) {
-        updateUser({
-          claimedCheckpoints: null,
-          points: 0,
-          lastCheckIn: null,
-          lastClaimedDay: ""
-        });
-      }
-    } catch (error) {
-      console.error("Error resetting check-in:", error);
-    }
-  };
-
-  const isClaimableToday = () => {
-    try {
-      if (!user?.lastCheckIn || !user?.lastClaimedDay) {
-        return day === "Day 01";
-      }
-
-      const lastCheckIn = new Date(user.lastCheckIn);
-      lastCheckIn.setHours(0, 0, 0, 0);
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
-
-      if (daysDifference > 1) return "reset";
-
-      if (daysDifference === 1) {
-        const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1] || "0");
-        setCurrentDay(currentDayNumber);
-        const thisDayNumber = parseInt(day.split(" ")[1] || "0");
-        return thisDayNumber === currentDayNumber + 1;
-      }
-
-      return false;
-    } catch (error) {
-      console.error("Error in isClaimableToday:", error);
-      return false;
-    }
-  };
+  const normalizeDate = (date: Date) => {
+    const d = new Date(date)
+    d.setHours(0, 0, 0, 0)
+    return d
+  }
 
   useEffect(() => {
     if (isClaimableToday() === "reset") {
-      resetCheckIn();
-      return;
+        resetCheckIn();
+        toast.success("Check-In Reset!!!")
+        return;
     }
-  }, [userId,WebApp]);
+}, [userId]);
 
-  const handleCheckIn = async () => {
-    if (isClaimed || loading || !userId) return;
-
-    setLoading(true);
-
+const isClaimableToday = () => {
     try {
-      const response = await fetch("/api/check-in", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId,
-          checkpointId,
-          points,
-          day,
-          bgImage
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        if (isSpecial) {
-          updateUser({
-            points,
-            claimedCheckpoints: [checkpointId],
-            gifts: bgImage ? [bgImage] : []
-          });
-        } else {
-          updateUser({
-            points,
-            claimedCheckpoints: [checkpointId]
-          });
+        if (isCheckpointClaimed) {
+            return false;
         }
-        toast.success(`Check-in successful! Points: ${data.points}, Streak: ${data.streak}`);
-      } else {
-        toast.error(data.error || "Check-in failed");
-      }
+
+        if (!user?.lastCheckIn || !user?.lastClaimedDay) {
+            return day === "Day 01";
+        }
+
+        const lastCheckIn = new Date(user?.lastCheckIn);
+        lastCheckIn.setHours(0, 0, 0, 0);
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (daysDifference > 1) return "reset";
+
+        if (daysDifference === 1) {
+            const currentDayNumber = parseInt(user?.lastClaimedDay.split(" ")[1] || "0");
+            const thisDayNumber = parseInt(day?.split(" ")[1] || "0");
+            return thisDayNumber === currentDayNumber + 1;
+        }
+
+        return false;
     } catch (error) {
-      console.error("Check-in error:", error);
-      toast.error("Failed to check in. Please try again.");
-    } finally {
-      setLoading(false);
+        console.error("Error in isClaimableToday:", error);
+        return false;
     }
-  };
-
-  const isClaimable = isClaimableToday();
-
-  return (
-    <div
-      onClick={() => isClaimable && handleCheckIn()}
-      className={`cursor-pointer ${loading ? 'pointer-events-none' : ''}`}
-    >
-      {isClaimed ? (
-        <div className="bg-gradient-to-tr border-[#016f15] border shadow-sm shadow-[#016f15] from-[#141414] via-[#016f15] to-[#141414] gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center">
-          <p className="text-white/45 text-xs">{day}</p>
-          <Check height={30} width={30} />
-          <h3 className="text-white text-xl font-semibold">{points}</h3>
-          <p className="text-white text-xs">Done</p>
-        </div>
-      ) : (
-        <div
-          className={`gap-1 px-6 p-2 rounded-xl flex flex-col justify-center items-center ${loading ? "opacity-50" : ""}`}
-          style={{
-            ...(isClaimable
-              ? {
-                backgroundColor: "white",
-                borderWidth: "2px",
-                borderStyle: "dashed",
-                borderColor: "black",
-                color: "black",
-                backgroundImage: bgImage ? `url(${bgImage})` : undefined,
-                backgroundSize: "cover",
-                backgroundPosition: "center"
-              }
-              : isSpecial && bgImage
-                ? {
-                  backgroundImage: `url(${bgImage})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center"
-                }
-                : { backgroundColor: "#141414" })
-          }}
-        >
-          <p className="text-xs">{day}</p>
-          <CheckpointIcon
-            theme={isClaimable ? true : false}
-            className={`${isSpecial ? "opacity-0" : ""}`}
-            height={30}
-            width={30}
-          />
-          <h3 className={`${isSpecial ? "opacity-0" : ""} text-xl font-semibold`}>
-            {points}
-            {currentDay}
-          </h3>
-          <p className="text-inherit/45 text-xs">
-            {loading ? (
-              <Loader className="animate-spin" height={15} width={15} />
-            ) : isClaimable === "reset" ? (
-              "Start Over"
-            ) : isClaimable ? (
-              "Claim"
-            ) : (
-              "Soon"
-            )}
-          </p>
-        </div>
-      )}
-    </div>
-  );
 };
 
-export { CheckInBox };
+const resetCheckIn = async () => {
+    try {
+        const response = await fetch("/api/check-in/reset", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId }),
+        });
+
+        if (response.ok) {
+            updateUser({
+                claimedCheckpoints: null,
+                lastCheckIn: null,
+                lastClaimedDay: ""
+            });
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error("Error resetting check-in:", error);
+    }
+};
+
+  useEffect(() => {
+    if (!user || isModalOpen) return
+
+    const lastCheckIn = user?.lastCheckIn ? normalizeDate(new Date(user?.lastCheckIn)) : null
+    const today = normalizeDate(new Date())
+
+    if (!lastCheckIn || lastCheckIn.getTime() !== today.getTime()) {
+      setIsModalOpen(true)
+    }
+  }, [user, isModalOpen])
+
+  return (
+    <>
+      <CheckInModel
+        checkpointId={checkpointId}
+        userId={userId}
+        points={points}
+        day={day}
+        isClaimable={isClaimableToday()}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)} />
+    </>
+  )
+}
+
+export default CheckInBox

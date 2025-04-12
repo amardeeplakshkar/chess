@@ -9,94 +9,27 @@ import { NumberTicker } from "../magicui/number-ticker"
 import Image from "next/image"
 import { useUser } from "../providers/UserProvider";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
 
 interface ProModalProps {
     isOpen: boolean;
     onClose: () => void;
-    apiLimitReached?: boolean;
+    isClaimable?: boolean | "reset";
     day?: string,
     checkpointId?: string,
     points?: number
     userId?: number
 }
-
 export function CheckInModel({
     isOpen,
     onClose,
     day,
     points,
     userId,
-    checkpointId
+    checkpointId,
+    isClaimable
 }: ProModalProps) {
     const { user, updateUser } = useUser()
-
-    // Check if this checkpoint has already been claimed
     const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpointId || '');
-
-    useEffect(() => {
-        if (isClaimableToday() === "reset") {
-            resetCheckIn();
-            return;
-        }
-    }, [userId]);
-
-    const isClaimableToday = () => {
-        try {
-            // If checkpoint already claimed, return false
-            if (isCheckpointClaimed) {
-                return false;
-            }
-
-            if (!user?.lastCheckIn || !user?.lastClaimedDay) {
-                return day === "Day 01";
-            }
-
-            const lastCheckIn = new Date(user.lastCheckIn);
-            lastCheckIn.setHours(0, 0, 0, 0);
-
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
-
-            if (daysDifference > 1) return "reset";
-
-            if (daysDifference === 1) {
-                const currentDayNumber = parseInt(user.lastClaimedDay.split(" ")[1] || "0");
-                const thisDayNumber = parseInt(day?.split(" ")[1] || "0");
-                return thisDayNumber === currentDayNumber + 1;
-            }
-
-            return false;
-        } catch (error) {
-            console.error("Error in isClaimableToday:", error);
-            return false;
-        }
-    };
-
-    const resetCheckIn = async () => {
-        try {
-            const response = await fetch("/api/check-in/reset", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId }),
-            });
-
-            if (response.ok) {
-                updateUser({
-                    claimedCheckpoints: null,
-                    lastCheckIn: null,
-                    lastClaimedDay: ""
-                });
-                window.location.reload();
-            }
-        } catch (error) {
-            console.error("Error resetting check-in:", error);
-        }
-    };
-
-
 
     const handleCheckIn = async () => {
         if (!userId) {
@@ -138,8 +71,6 @@ export function CheckInModel({
         }
     };
 
-    const isClaimable = isClaimableToday();
-
     return (
         <>
             {isClaimable && !isCheckpointClaimed &&
@@ -168,13 +99,14 @@ export function CheckInModel({
                                     setTimeout(() => {
                                         handleCheckIn();
                                         onClose();
-                                    }, 500);
+                                    }, 300);
                                 }}
                                 className="w-full">
                                 <ConfettiButton className='w-full h-10'>
                                     Check-In
                                 </ConfettiButton>
                             </div>
+
                         </div>
                     </DialogContent>
                 </Dialog>
