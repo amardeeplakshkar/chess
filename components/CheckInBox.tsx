@@ -5,7 +5,6 @@ import { CheckInModel } from './ui/checkinModel';
 import { useUser } from './providers/UserProvider';
 import toast from 'react-hot-toast';
 
-
 interface ProModalProps {
   day?: string,
   checkpointId?: string,
@@ -19,88 +18,99 @@ export function CheckInBox({
   userId,
   checkpointId
 }: ProModalProps) {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const { user, updateUser } = useUser()
-  const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpointId || '')
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isResetting, setIsResetting] = useState<boolean>(false);
+  const { user, updateUser } = useUser();
+  const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpointId || '');
 
   const normalizeDate = (date: Date) => {
-    const d = new Date(date)
-    d.setHours(0, 0, 0, 0)
-    return d
-  }
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  };
 
   useEffect(() => {
-    if (isClaimableToday() === "reset") {
+    if (isResetting) return; // Don't check if we're in the middle of a reset
+
+    const checkClaimStatus = () => {
+      const claimableStatus = isClaimableToday();
+      if (claimableStatus === "reset") {
+        setIsResetting(true);
         resetCheckIn();
-        toast.success("Check-In Reset!!!")
-        return;
+      } else if (claimableStatus && !isCheckpointClaimed && !isModalOpen) {
+        setIsModalOpen(true);
+      }
+    };
+
+    // Only check on initial load and when user data changes
+    if (user && !isModalOpen) {
+      checkClaimStatus();
     }
-}, [userId]);
+  }, [user, isCheckpointClaimed]);
 
-const isClaimableToday = () => {
+  const isClaimableToday = () => {
     try {
-        if (isCheckpointClaimed) {
-            return false;
-        }
-
-        if (!user?.lastCheckIn || !user?.lastClaimedDay) {
-            return day === "Day 01";
-        }
-
-        const lastCheckIn = new Date(user?.lastCheckIn);
-        lastCheckIn.setHours(0, 0, 0, 0);
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
-
-        if (daysDifference > 1) return "reset";
-
-        if (daysDifference === 1) {
-            const currentDayNumber = parseInt(user?.lastClaimedDay.split(" ")[1] || "0");
-            const thisDayNumber = parseInt(day?.split(" ")[1] || "0");
-            return thisDayNumber === currentDayNumber + 1;
-        }
-
+      if (isCheckpointClaimed) {
         return false;
+      }
+
+      if (!user?.lastCheckIn || !user?.lastClaimedDay) {
+        return day === "Day 01";
+      }
+
+      const lastCheckIn = new Date(user?.lastCheckIn);
+      lastCheckIn.setHours(0, 0, 0, 0);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (daysDifference > 1) return "reset";
+
+      if (daysDifference === 1) {
+        const currentDayNumber = parseInt(user?.lastClaimedDay.split(" ")[1] || "0");
+        const thisDayNumber = parseInt(day?.split(" ")[1] || "0");
+        return thisDayNumber === currentDayNumber + 1;
+      }
+
+      return false;
     } catch (error) {
-        console.error("Error in isClaimableToday:", error);
-        return false;
+      console.error("Error in isClaimableToday:", error);
+      return false;
     }
-};
+  };
 
-const resetCheckIn = async () => {
+  const resetCheckIn = async () => {
     try {
-        const response = await fetch("/api/check-in/reset", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId }),
+      const response = await fetch("/api/check-in/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      if (response.ok) {
+        updateUser({
+          claimedCheckpoints: null,
+          lastCheckIn: null,
+          lastClaimedDay: ""
         });
-
-        if (response.ok) {
-            updateUser({
-                claimedCheckpoints: null,
-                lastCheckIn: null,
-                lastClaimedDay: ""
-            });
-            window.location.reload();
-        }
+        
+        // Reset states after successful reset
+        setIsResetting(false);
+        setIsModalOpen(false);
+        
+        toast.success("Check-In Reset!");
+      }
     } catch (error) {
-        console.error("Error resetting check-in:", error);
+      console.error("Error resetting check-in:", error);
+      setIsResetting(false);
     }
-};
+  };
 
-  useEffect(() => {
-    if (!user || isModalOpen) return
-
-    const lastCheckIn = user?.lastCheckIn ? normalizeDate(new Date(user?.lastCheckIn)) : null
-    const today = normalizeDate(new Date())
-
-    if (!lastCheckIn || lastCheckIn.getTime() !== today.getTime()) {
-      setIsModalOpen(true)
-    }
-  }, [user, isModalOpen])
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -111,9 +121,10 @@ const resetCheckIn = async () => {
         day={day}
         isClaimable={isClaimableToday()}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} />
+        onClose={handleCloseModal}
+      />
     </>
-  )
+  );
 }
 
-export default CheckInBox
+export default CheckInBox;

@@ -81,8 +81,8 @@ const checkpoints = [
 
 export { checkpoints };
 export const APP_URL = "https://t.me/ChessOGBot/app?startapp="
-export const COMMUNITY_URL = "https://t.me/chessOGFam"
-export const TWITTER_URL = "https://twitter.com/chessOGFam"
-export const DISCORD_URL = "https://discord.gg/chessOGFam"
-export const INSTAGRAM_URL = "https://www.instagram.com/chessOGFam/"
+export const COMMUNITY_URL = "https://t.me/ChessOGHub"
+export const TWITTER_URL = "https://twitter.com/ChessOGHub"
+export const DISCORD_URL = "https://discord.gg/ChessOGHub"
+export const INSTAGRAM_URL = "https://www.instagram.com/ChessOGHub/"
 export const YOUTUBE_URL = "https://www.youtube.com/channel/UCZ88888888888888888888"

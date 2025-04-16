@@ -60,7 +60,7 @@ export default async function DataPage() {
                     <AvatarImage src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgADXhgAAogOKEg.webp" />
                 </Avatar>
             </div>
-            <ScrollArea className="h-[30rem] w-full rounded-md my-4">
+            <ScrollArea className="h-[28rem] w-full rounded-md my-4">
                 {data.map((item: User) => {
                     const position = data.indexOf(item) + 1;
                     const isMedal = position <= 3;
