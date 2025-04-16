@@ -23,12 +23,6 @@ export function CheckInBox({
   const { user, updateUser } = useUser();
   const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpointId || '');
 
-  const normalizeDate = (date: Date) => {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d;
-  };
-
   useEffect(() => {
     if (isResetting) return; // Don't check if we're in the middle of a reset
 
