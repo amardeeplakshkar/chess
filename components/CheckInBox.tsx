@@ -71,7 +71,7 @@ export function CheckInBox({
       today.setHours(0, 0, 0, 0);
 
       const daysDifference = Math.floor((today.getTime() - lastCheckIn.getTime()) / (1000 * 60 * 60 * 24));
-
+if (daysDifference === 0) return false;
       if (daysDifference > 1) return "reset";
 
       if (daysDifference === 1) {
