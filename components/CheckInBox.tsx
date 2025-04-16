@@ -26,11 +26,23 @@ export function CheckInBox({
   useEffect(() => {
     if (isResetting) return; // Don't check if we're in the middle of a reset
 
-    const checkClaimStatus = () => {
+    const checkClaimStatus = async () => {
       const claimableStatus = isClaimableToday();
+
       if (claimableStatus === "reset") {
         setIsResetting(true);
-        resetCheckIn();
+        try {
+          await resetCheckIn();
+          // After reset, if this is Day 01, show the modal
+          if (day === "Day 01") {
+            setIsModalOpen(true);
+          }
+        } catch (error) {
+          console.error("Reset error:", error);
+          toast.error("Failed to reset check-in status");
+        } finally {
+          setIsResetting(false);
+        }
       } else if (claimableStatus && !isCheckpointClaimed && !isModalOpen) {
         setIsModalOpen(true);
       }
@@ -40,7 +52,7 @@ export function CheckInBox({
     if (user && !isModalOpen) {
       checkClaimStatus();
     }
-  }, [user, isCheckpointClaimed]);
+  }, [user, isCheckpointClaimed, day]);
 
   const isClaimableToday = () => {
     try {
@@ -48,7 +60,7 @@ export function CheckInBox({
         return false;
       }
 
-      if (!user?.lastCheckIn || !user?.lastClaimedDay) {
+      if (!user?.lastCheckIn || !user?.lastClaimedDay || user?.streak === 0) {
         return day === "Day 01";
       }
 
@@ -83,22 +95,28 @@ export function CheckInBox({
         body: JSON.stringify({ userId }),
       });
 
-      if (response.ok) {
+      if (!response.ok) {
+        throw new Error('Reset failed');
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
         updateUser({
           claimedCheckpoints: null,
           lastCheckIn: null,
           lastClaimedDay: ""
         });
-        
-        // Reset states after successful reset
-        setIsResetting(false);
-        setIsModalOpen(false);
-        
+
         toast.success("Check-In Reset!");
+        return true;
+      } else {
+        throw new Error(data.error || 'Reset failed');
       }
     } catch (error) {
       console.error("Error resetting check-in:", error);
-      setIsResetting(false);
+      toast.error("Failed to reset check-in");
+      return false;
     }
   };
 

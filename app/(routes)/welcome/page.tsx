@@ -10,6 +10,8 @@ import 'aos/dist/aos.css';
 import CheckpointIcon from '@/components/CheckpointIcon';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/components/providers/UserProvider';
+import DogsGif from "@/public/Dogs.gif";
+import TelegramGif from "@/public/Telegram.gif";
 
 const WelcomePage = () => {
     const { userData } = useTelegram()
@@ -66,8 +68,8 @@ const WelcomePage = () => {
                                 You&apos;re a devoted Telegram user!
                             </p>
                             <section data-aos='fade-down' data-aos-delay='1100' className='flex-1  flex justify-center items-center'>
-                                <Avatar className='rouded-full w-[10rem] h-[10rem]'>
-                                    <AvatarImage src='https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/telegram' />
+                                <Avatar className='rounded-none w-[10rem] h-[10rem]'>
+                                    <AvatarImage src={TelegramGif.src} />
                                 </Avatar>
                             </section>
                             <p className='text-sm text-white/60 text-center mb-[3.5rem]'>
@@ -77,14 +79,14 @@ const WelcomePage = () => {
                     </CarouselItem>
                     <CarouselItem>
                         <div className='h-[100dvh] flex flex-col p-8'>
-                            <h1 data-aos='fade-down' className='text-3xl font-bold'>DOGS ERA</h1>
+                            <h1 data-aos='fade-down' className='text-3xl font-bold'>DOGS 🐶 ERA</h1>
                             <h2 data-aos='fade-down' data-aos-delay='500' className='text-2xl font-bold'>The Real OGs!</h2>
                             <p data-aos='fade-down' data-aos-delay='800' className='text-sm text-white/60'>
                                 You&apos;ve collected more dogs than 40% of users!
                             </p>
                             <section data-aos='fade-down' data-aos-delay='1100' className='flex-1  flex justify-center items-center'>
-                                <Avatar className='rouded-full w-[10rem] h-[10rem]'>
-                                    <AvatarImage src='https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/perks/dogs' />
+                                <Avatar className='rounded-none w-[10rem] h-[10rem]'>
+                                    <AvatarImage src={DogsGif.src} />
                                 </Avatar>
                             </section>
                             <p className='text-sm text-white/60 text-center mb-[3.5rem]'>
@@ -101,7 +103,7 @@ const WelcomePage = () => {
                             </p>
                             <section data-aos='fade-down' data-aos-delay='1100' className='flex-1  flex justify-center items-center'>
                                 <Avatar className='rouded-full w-[10rem] h-[10rem]'>
-                                    <AvatarImage className='object-cover object-center' src='https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/checkpoint/hamster' />
+                                    <AvatarImage className='object-cover object-center' src='https://gam3s.gg/_next/image/?url=https%3A%2F%2Fassets.gam3s.gg%2FHamster_Kombat_Image_09fbd4fc51%2FHamster_Kombat_Image_09fbd4fc51.jpg&w=1920&q=75' />
                                 </Avatar>
                             </section>
                             <p className='text-sm text-white/60 text-center mb-[3.5rem]'>
@@ -111,7 +113,7 @@ const WelcomePage = () => {
                     </CarouselItem>
                     <CarouselItem>
                         <div className='h-[100dvh] flex flex-col p-8'>
-                            <h1 data-aos='fade-down' className='text-3xl font-bold'>CHECKPOINT ERA</h1>
+                            <h1 data-aos='fade-down' className='text-3xl font-bold'>CHESS ♟️ ERA</h1>
                             <h2 data-aos='fade-down' data-aos-delay='500' className='text-2xl font-bold'>Begins!</h2>
                             <p data-aos='fade-down' data-aos-delay='800' className='text-sm text-white/60'>
                                 You&apos;re a active Telegram user!

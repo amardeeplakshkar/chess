@@ -35,9 +35,9 @@ export function CheckInModel({
     const isCheckpointClaimed = user?.claimedCheckpoints.includes(checkpointId || '');
 
     const handleCheckIn = async () => {
-        if (isProcessing) return; // Prevent multiple clicks
+        if (isProcessing) return;
         if (!userId) {
-            toast.error("Login failed");
+            toast.error("Please login to check in");
             return;
         }
 
@@ -61,21 +61,22 @@ export function CheckInModel({
 
             const data = await response.json();
 
-            if (response.ok) {
-                updateUser({
-                    points,
-                    claimedCheckpoints: [checkpointId || ""],
-                    lastCheckIn: new Date(),
-                    lastClaimedDay: day
-                });
-                toast.success(`Check-in successful! Points: ${data.points}, Streak: ${data.streak}`);
-                onClose();
-            } else {
-                toast.error(data.error || "Check-in failed");
+            if (!response.ok) {
+                throw new Error(data.error || "Check-in failed");
             }
+
+            updateUser({
+                points,
+                claimedCheckpoints: [checkpointId || ""],
+                lastCheckIn: new Date(),
+                lastClaimedDay: day
+            });
+
+            toast.success(`Check-in successful! Points: ${data.points}, Streak: ${data.streak}`);
+            onClose();
         } catch (error) {
             console.error("Check-in error:", error);
-            toast.error("Failed to check in. Please try again.");
+            toast.error(error instanceof Error ? error.message : "Failed to check in. Please try again.");
         } finally {
             setIsProcessing(false);
         }
@@ -99,18 +100,18 @@ export function CheckInModel({
                                 <div>Streak</div>
                             </div>
                             <div className='flex-1 flex justify-center items-center flex-col'>
-                                <Image 
-                                    alt='' 
-                                    src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgADSgIAAladvQo.webp" 
-                                    height={150} 
-                                    width={150} 
-                                    unoptimized 
+                                <Image
+                                    alt=''
+                                    src="https://stickers.fullyst.com/b844adbb-1c43-50a5-8a2d-7b9574ba0dbd/full/AgADSgIAAladvQo.webp"
+                                    height={150}
+                                    width={150}
+                                    unoptimized
                                 />
                                 <p className='font-bold my-6 text-3xl'>
                                     {points}<span className='text-sm'>&nbsp;CPs</span>
                                 </p>
                             </div>
-                            <ConfettiButton 
+                            <ConfettiButton
                                 onClick={handleCheckIn}
                                 disabled={isProcessing}
                                 className={`w-full h-10 ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}

@@ -6,7 +6,7 @@ import CurrentChapter from '@/components/CurrentChapter'
 import { useTelegram } from '@/components/providers/TelegramData'
 import { useUser } from '@/components/providers/UserProvider'
 import MedalIcon from '@/components/ui/MedalType'
-import { APP_URL, checkpoints, COMMUNITY_URL } from '@/constants'
+import { checkpoints, COMMUNITY_URL } from '@/constants'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import toast from 'react-hot-toast'
@@ -14,7 +14,7 @@ import toast from 'react-hot-toast'
 const HomePage = () => {
   const { user, updateUser } = useUser()
   const router = useRouter()
-  const { WebApp, userData, startParam } = useTelegram()
+  const { userData, startParam } = useTelegram()
 
   useEffect(() => {
     const processReferral = async () => {
@@ -46,26 +46,26 @@ const HomePage = () => {
     processReferral()
   }, [startParam, userData?.userId, updateUser])
 
-  const handleShareStory = (
-    mediaUrl: string,
-    text = "",
-    widgetLink?: { url: string; name?: string }
-  ) => {
-    if (WebApp) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const params: Record<string, any> = {}
-      if (text) params.text = text
-      if (widgetLink && widgetLink.url) {
-        params.widget_link = {
-          url: widgetLink.url,
-          ...(widgetLink.name && { name: widgetLink.name }),
-        }
-      }
-      WebApp.shareToStory(mediaUrl, params)
-    } else {
-      console.error("Telegram WebApp SDK not available.")
-    }
-  }
+  // const handleShareStory = (
+  //   mediaUrl: string,
+  //   text = "",
+  //   widgetLink?: { url: string; name?: string }
+  // ) => {
+  //   if (WebApp) {
+  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //     const params: Record<string, any> = {}
+  //     if (text) params.text = text
+  //     if (widgetLink && widgetLink.url) {
+  //       params.widget_link = {
+  //         url: widgetLink.url,
+  //         ...(widgetLink.name && { name: widgetLink.name }),
+  //       }
+  //     }
+  //     WebApp.shareToStory(mediaUrl, params)
+  //   } else {
+  //     console.error("Telegram WebApp SDK not available.")
+  //   }
+  // }
 
   return (
     <div className='h-full w-full flex flex-col items-center p-4'>
@@ -101,12 +101,12 @@ const HomePage = () => {
           Join Community
         </Button>
 
-        <div className='grid grid-cols-2 gap-2 w-full'>
+        <div className='grid grid-cols-1 gap-2 w-full'>
           <Button onClick={() => router.push("/frens")} className='w-full font-semibold'>
             Invite Friends
           </Button>
 
-          <Button
+          {/* <Button
             onClick={() =>
               handleShareStory(
                 "httpupload/f_auto,q_auto/v1/Checkpoint/checkpoint",
@@ -117,7 +117,7 @@ const HomePage = () => {
             className='w-full font-semibold bg-transparent border'
           >
             Share Story
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

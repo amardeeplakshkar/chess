@@ -8,8 +8,8 @@ import { useUser } from '@/components/providers/UserProvider';
 import TaskCard from '@/components/TaskCard'
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { APP_URL, COMMUNITY_URL } from '@/constants';
-import { CircleFadingPlus, MessageCircle } from 'lucide-react';
+import {  COMMUNITY_URL } from '@/constants';
+import {  MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
@@ -28,7 +28,7 @@ type Task = {
 
 
 const Tasks = () => {
-    const { userData, WebApp } = useTelegram()
+    const { userData } = useTelegram()
     const [loadingTask, setLoadingTask] = useState<string | null>(null)
     const { user, updateUser } = useUser()
     const limitedTasks = [
@@ -101,16 +101,16 @@ const Tasks = () => {
             iconBg: "bg-red-500",
             onClick: () => handleFollowChannel("SM2a1b3c4d6e7f8a9b0c1d02", `${COMMUNITY_URL}`, 10)
         },
-        {
-            id: "SM2a1b3c4d6e7f8a9b0c1d05",
-            title: "Share Story",
-            taskIcon: <CircleFadingPlus />,
-            points: 50,
-            iconBg: "bg-violet-500",
-            onClick: () => handleShareStory("SM2a1b3c4d6e7f8a9b0c1d05", 50, "https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/checkpoint",
-                `${APP_URL}${user?.telegramId}`,
-                { url: `${APP_URL}${user?.telegramId}`, name: "Visit Now" })
-        },
+        // {
+        //     id: "SM2a1b3c4d6e7f8a9b0c1d05",
+        //     title: "Share Story",
+        //     taskIcon: <CircleFadingPlus />,
+        //     points: 50,
+        //     iconBg: "bg-violet-500",
+        //     onClick: () => handleShareStory("SM2a1b3c4d6e7f8a9b0c1d05", 50, "https://res.cloudinary.com/duscymcfc/image/upload/f_auto,q_auto/v1/Checkpoint/checkpoint",
+        //         `${APP_URL}${user?.telegramId}`,
+        //         { url: `${APP_URL}${user?.telegramId}`, name: "Visit Now" })
+        // },
     ];
 
     const partnerAirdropTasks = [
@@ -207,31 +207,31 @@ const Tasks = () => {
         }
     };
 
-    const handleShareStory = (taskId: string, points: number, mediaUrl: string, text = "", widgetLink?: { url: string; name?: string }) => {
-        setLoadingTask(taskId);
-        if (WebApp) { 
-            const params: Record<string, any> = {};
-            if (text) {
-                params.text = text;
-            }
+    // const handleShareStory = (taskId: string, points: number, mediaUrl: string, text = "", widgetLink?: { url: string; name?: string }) => {
+    //     setLoadingTask(taskId);
+    //     if (WebApp) { 
+    //         const params: Record<string, any> = {};
+    //         if (text) {
+    //             params.text = text;
+    //         }
 
-            if (widgetLink && widgetLink.url) {
-                params.widget_link = {
-                    url: widgetLink.url,
-                    ...(widgetLink.name && { name: widgetLink.name }),
-                };
-            }
+    //         if (widgetLink && widgetLink.url) {
+    //             params.widget_link = {
+    //                 url: widgetLink.url,
+    //                 ...(widgetLink.name && { name: widgetLink.name }),
+    //             };
+    //         }
 
-            WebApp.shareToStory(mediaUrl, params);
-            setTimeout(() => {
-                completeTask(taskId, points);
-            }, 10000)
-            setLoadingTask(null);
-        } else {
-            setLoadingTask(null);
-            console.error("Telegram WebApp SDK not available.");
-        }
-    }
+    //         WebApp.shareToStory(mediaUrl, params);
+    //         setTimeout(() => {
+    //             completeTask(taskId, points);
+    //         }, 10000)
+    //         setLoadingTask(null);
+    //     } else {
+    //         setLoadingTask(null);
+    //         console.error("Telegram WebApp SDK not available.");
+    //     }
+    // }
 
     const handleEmojiTask = async (taskId: string, points: number) => {
         setLoadingTask(taskId);
