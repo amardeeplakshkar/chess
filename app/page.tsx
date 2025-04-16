@@ -1,12 +1,11 @@
 'use client'
 
 import Button from '@/components/Button'
-import CheckInBox from '@/components/CheckInBox'
 import CurrentChapter from '@/components/CurrentChapter'
 import { useTelegram } from '@/components/providers/TelegramData'
 import { useUser } from '@/components/providers/UserProvider'
 import MedalIcon from '@/components/ui/MedalType'
-import { checkpoints, COMMUNITY_URL } from '@/constants'
+import { COMMUNITY_URL } from '@/constants'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import toast from 'react-hot-toast'
@@ -86,16 +85,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {checkpoints.map((data, i) =>
-        <CheckInBox
-          key={i}
-          day={data.day}
-          points={data.number}
-          userId={user?.telegramId}
-          checkpointId={data.id}
-        />
-      )
-      }
+    
       <div className='text-[.8rem] w-full flex mb-8 justify-center items-center flex-col gap-2 p-2'>
         <Button onClick={() => router.replace(`${COMMUNITY_URL}`)} className='w-full bg-white text-black font-semibold'>
           Join Community
