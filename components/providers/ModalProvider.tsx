@@ -21,4 +21,4 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export default ModalProvider
+export {ModalProvider}
