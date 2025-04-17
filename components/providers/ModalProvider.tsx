@@ -1,5 +1,5 @@
 "use client"
-import { checkpoints} from '@/constants
+import { checkpoints} from '@/constants'
 import { useUser } from '@/components/providers/UserProvider'
 import CheckInBox from '@/components/CheckInBox'
 const ModalProvider = ({ children }: { children: React.ReactNode }) => {
