@@ -1,3 +1,4 @@
+"use client"
 import { checkpoints} from '@/constants
 import { useUser } from '@/components/providers/UserProvider'
 import CheckInBox from '@/components/CheckInBox'
