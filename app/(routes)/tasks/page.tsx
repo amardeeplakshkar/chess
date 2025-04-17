@@ -114,6 +114,30 @@ const Tasks = () => {
     ];
 
     const partnerAirdropTasks = [
+        
+        {
+            name: "CAPS",
+            logo: "https://lh7-rt.googleusercontent.com/docsz/AD_4nXddJ88joyuEsh9xbly9ELg6PKHGMW0m5XicnY3CN6Hm3yuzNQKLAHPOXnahPmt0Doh0JrsRZsVZ09XrIaIMznVoAxgVX90zRXKm7lrSTTPm9vSxn8dmwhkCWhcFJ-TxFvLXe7eoow?key=oDc7xJx6NO6bFvZceoMhlCBH",
+            partnerBg: "https://capsbot.com/caps_group.png",
+            tasks: [
+                {
+                    id: "PA2a1b3c4d6e7f8a9b0c1d05",
+                    title: "Join CAPS",
+                    taskIcon: <BsTelegram />,
+                    points: 50,
+                    url: "https://t.me/DurovCapsBot/caps?startapp=6102684114",
+                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d05", "https://t.me/DurovCapsBot/caps?startapp=6102684114", 50)
+                },
+                {
+                    id: "PA2a1b3c4d6e7f8a9b0c1d06",
+                    title: "Join CAPS Community",
+                    taskIcon: <BsPersonCheck />,
+                    points: 30,
+                    url: "https://t.me/caps",
+                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d06", "https://t.me/caps", 30)
+                }
+            ]
+        },
         {
             name: "Treasury",
             logo: "https://res.cloudinary.com/daqm901wx/image/upload/f_auto,q_auto/v1/checkpoint/treasury",
@@ -138,53 +162,22 @@ const Tasks = () => {
             ]
         },
         {
-            name: "CAPS",
-            logo: "https://lh7-rt.googleusercontent.com/docsz/AD_4nXddJ88joyuEsh9xbly9ELg6PKHGMW0m5XicnY3CN6Hm3yuzNQKLAHPOXnahPmt0Doh0JrsRZsVZ09XrIaIMznVoAxgVX90zRXKm7lrSTTPm9vSxn8dmwhkCWhcFJ-TxFvLXe7eoow?key=oDc7xJx6NO6bFvZceoMhlCBH",
-            partnerBg: "https://capsbot.com/caps_group.png",
+            name: "Pavel Durov",
+            logo: "https://cdn4.cdn-telegram.org/file/tDhy8D3i7fN3e3OIDzyfeTXc_aCroHQEFA4RkQlqyab5zWw3Y-SX2hMHSXsICDuPNRP9ViFAHXX_DL87oh5--t3QCbrZ-BnqFnpKy6g6qcE5PxWuaPwuAX0Flb54n4SlKgQhx_7L0GCW6unDmCtqQ4CO7scX3qMDLXDSse4jqeOD7xNmiiG3acC8CqxDCFAeiKQLZVCY9LTKwtR_MJXigNkQKCPlbmrhhiIPaRo7v9kfaU_1PoA2z4KaY1lSISFU8IA75qyryxvlmCwgQPvVxlHmgPVYm40YaSgS8eIeDaB2bu_ldNSetIrnD_u780ADk7w_hlD2aWSQYtM5uB0idg.jpg",
+            partnerBg: "https://blogassets.airtel.in/wp-content/uploads/2023/02/4-7.jpg",
             tasks: [
                 {
-                    id: "PA2a1b3c4d6e7f8a9b0c1d05",
-                    title: "Join CAPS",
-                    taskIcon: <BsTelegram />,
-                    points: 50,
-                    url: "https://t.me/DurovCapsBot/caps?startapp=6102684114",
-                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d05", "https://t.me/DurovCapsBot/caps?startapp=6102684114", 50)
-                },
-                {
-                    id: "PA2a1b3c4d6e7f8a9b0c1d06",
-                    title: "Join CAPS Community",
+                    id: "PB2a1b3c4d6e7f8a9b0c1d12",
+                    title: "Follow Durov",
                     taskIcon: <BsPersonCheck />,
-                    points: 30,
-                    url: "https://t.me/caps",
-                    onClick: () => handleFollowChannel("PA2a1b3c4d6e7f8a9b0c1d06", "https://t.me/caps", 30)
-                }
+                    points: 100,
+                    iconBg: "bg-[#FFD700]",
+                    url: "https://t.me/durov",
+                    onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d12", "https://t.me/durov", 100)
+                },
             ]
-        },
+        }
 
-        // {
-        //     name: "Partner B Airdrop",
-        //     logo: "https://images.squarespace-cdn.com/content/v1/5313d422e4b0aeaef76ef185/6da8296e-c16e-478c-8b4f-598f8e05db98/IAGE+Logo.jpg",
-        //     partnerBg: "https://miro.medium.com/v2/resize:fit:720/format:webp/0*BpBk3olJUw5TiqCF.png",
-        //     tasks: [
-        //         {
-        //             id: "PB2a1b3c4d6e7f8a9b0c1d03",
-        //             title: "Claim Partner B Airdrop",
-        //             taskIcon: <BsGift />,
-        //             points: 100,
-        //             iconBg: "bg-[#FFD700]",
-        //             url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
-        //             onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d03", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 100)
-        //         },
-        //         {
-        //             id: "PB2a1b3c4d6e7f8a9b0c1d04",
-        //             title: "Stake Partner B Tokens",
-        //             taskIcon: <BsCoin />,
-        //             points: 200,
-        //             url: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet",
-        //             onClick: () => handleFollowChannel("PB2a1b3c4d6e7f8a9b0c1d04", "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=mainnet", 200)
-        //         }
-        //     ]
-        // }
     ];
 
     const handleFollowChannel = (taskId: string, url: string, points: number) => {
@@ -318,7 +311,7 @@ const Tasks = () => {
                 <TabsContent value='partner'>
                     <ScrollArea className='h-[50dvh]'>
                         {partnerAirdropTasks !== null ?
-                            partnerAirdropTasks.map((partner, index) => (
+                            partnerAirdropTasks.slice().reverse().map((partner, index) => (
                                 <div key={index} style={{
                                     backgroundImage: `url(${partner.partnerBg})`,
                                 }} className="my-2 bg-purple-500/25 *:m-1 p-2 rounded-lg bg-cover bg-center">
