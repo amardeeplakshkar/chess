@@ -1,6 +1,7 @@
 'use client'
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import { TelegramProvider } from "./TelegramData";
+import { ModalProvider } from "./ModalProvider";
 import { Toaster } from "react-hot-toast";
 import dynamic from "next/dynamic";
 import { CarouselProvider } from "../ui/carousel";
@@ -21,9 +22,11 @@ export function Provider({ children }: { children: React.ReactNode }) {
                     <div className="relative -z-50" id="stars2"></div>
                     <div className="relative -z-50" id="stars3"></div>
                     <div className="relative -z-50" id="stars"></div>
-                    <CarouselProvider>
-                    {children}
-                    </CarouselProvider>
+                        <ModalProvider>
+                            <CarouselProvider>
+                            {children}
+                                </CarouselProvider>
+                        </ModalProvider>
                 </TonConnectUIProvider>
             </UserProviderNoSSR>
         </TelegramProvider>
