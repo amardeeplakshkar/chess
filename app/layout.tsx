@@ -25,7 +25,7 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
         <Provider>
-          <div className="h-[98dvh] flex flex-col">
+          <div className="h-[98dvh] pt-[3rem] flex flex-col">
             <div className="flex-1">
               {children}
             </div>

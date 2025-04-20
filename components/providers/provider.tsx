@@ -11,7 +11,7 @@ const UserProviderNoSSR = dynamic(() => import("./UserProvider"), {
 });
 
 export function Provider({ children }: { children: React.ReactNode }) {
-   
+
     return (
         <TelegramProvider>
             <UserProviderNoSSR>
@@ -22,11 +22,11 @@ export function Provider({ children }: { children: React.ReactNode }) {
                     <div className="relative -z-50" id="stars2"></div>
                     <div className="relative -z-50" id="stars3"></div>
                     <div className="relative -z-50" id="stars"></div>
-                        <ModalProvider>
-                            <CarouselProvider>
+                    <ModalProvider>
+                        <CarouselProvider>
                             {children}
-                                </CarouselProvider>
-                        </ModalProvider>
+                        </CarouselProvider>
+                    </ModalProvider>
                 </TonConnectUIProvider>
             </UserProviderNoSSR>
         </TelegramProvider>
