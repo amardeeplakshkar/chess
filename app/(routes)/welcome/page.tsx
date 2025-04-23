@@ -57,7 +57,7 @@ const WelcomePage = () => {
     }
     return (
         <div>
-            <Carousel className='relative z-50'>
+            <Carousel className='mt-[-4rem] relative z-50'>
                 <CarouselIndicator className='flex justify-center items-center gap-2 absolute bottom-auto left-1/2 -translate-x-1/2 mb-4' />
                 <CarouselContent>
                     <CarouselItem>
