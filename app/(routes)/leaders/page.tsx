@@ -10,7 +10,7 @@ const getData = async () => {
     noStore();
     return await prisma.user.findMany({
         orderBy: { points: "desc" },
-        take: 20,
+        take: 10,
     });
 };
 
